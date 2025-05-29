@@ -1,0 +1,20 @@
+{
+  "include": ["**/*"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "target": "esnext",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "lib": ["es5", "es6", "dom", "esnext"],
+    "esModuleInterop": true,
+    "checkJs": true,
+    "module": "commonjs",
+    "moduleResolution": "Node",
+     "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
