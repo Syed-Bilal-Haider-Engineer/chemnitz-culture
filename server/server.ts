@@ -1,10 +1,11 @@
 import express, { NextFunction, Request, Response} from 'express';
 import cors from 'cors';
 import  { PrismaClient } from '@prisma/client';
-import { corsOptions } from './configuration/cors';
+import { corsOptions } from './src/config/cors';
 import helmet from 'helmet';
 import { getUser } from './utiles/global';
-import router from './api/user';
+import router from './src/api/user/user.routes';
+import placesRouter from './src/api/places/places.routes';
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(helmet())
 app.use(middleware)
 
-app.use('/api',router)
+app.use('/api',router,placesRouter)
 app.listen(port, () => {
   console.log(`App started successfully on port ${port}`);
 });

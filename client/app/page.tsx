@@ -1,56 +1,49 @@
-import Image from "next/image";
-import Map from "./components/Mapbox";
-
+'use client';
+import Map from './components/Mapbox';
+import {useEffect, useState} from 'react';
+import {FeatureCollection} from 'geojson';
+import { features } from 'process';
 export default function Home() {
+  const [geoData, setGeoData] = useState<FeatureCollection | null>(null);
+  const [Resturants,setResturants] = useState<FeatureCollection | null>(null);
+  const getMeusams = () => {
+     fetch('/Chemnitz.json') // ✅ Make sure Chemnitz.json is in the public folder
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.features.length);
+        const filtered = data.features.filter(
+          (f: any) => f?.properties?.tourism === 'museum'
+        );
+
+        const filteredResturants = data.features.filter(
+          (f: any) => f?.properties?.amenity === 'restaurant'
+        );
+        setResturants({
+          type:'FeatureCollection',
+          features:filteredResturants
+        })
+        setGeoData({
+          type: 'FeatureCollection',
+          features: filtered,
+        });
+
+         const filteredthearter = data.features.filter(
+          (f: any) => f?.properties?.amenity === 'theatre'
+        );
+
+      console.log(filteredthearter,"filtered theatre")
+      });
+  }
+
+  useEffect(() => {
+    getMeusams();
+  }, []);
+    
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-     {/* <Map/> */}
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+    <div>
+      {Resturants && <Map geoData={Resturants} />}
+      <footer>
+        <h1>Syed Bilal Haider</h1>
       </footer>
     </div>
   );

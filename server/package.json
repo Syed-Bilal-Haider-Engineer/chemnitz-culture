@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "\"Chemnitz cultural website where visitors can explore tourism and cultural attractions.\"",
   "main": "index.js",
+  "prisma": { "seed": "ts-node prisma/seed.ts", "schema": "./prisma/schema" },
   "scripts": {
     "dev": "nodemon --exec ts-node ./server.ts",
     "lint": "eslint . --fix",
@@ -10,9 +11,11 @@
     "database:migrate": "npx prisma migrate dev --name init",
     "database:deploy": "npx prisma migrate deploy",
     "generate": "npx prisma generate",
-    "seed": "npx prisma db seed --preview-feature",
+    "postinstall": "npx prisma generate",
+    "seed": "ts-node prisma/seed.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Syed-Bilal-Haider-Engineer/Chemnitz-culture.git"

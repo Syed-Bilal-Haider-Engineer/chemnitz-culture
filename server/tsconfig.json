@@ -13,7 +13,8 @@
     "checkJs": true,
     "module": "commonjs",
     "moduleResolution": "Node",
-     "paths": {
+    "baseUrl": "./",
+    "paths": {
       "@/*": ["./*"]
     }
   }

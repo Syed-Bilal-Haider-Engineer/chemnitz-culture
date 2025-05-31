@@ -1,0 +1,13 @@
+model Artworks {
+  type       String
+  id          String  @id @unique
+  name        String?
+  artist_name String?
+  artwork_type String?
+  tourism     String?
+  old_name    String?
+  operator    String?
+  addr_city   String? @map("addr:city")
+  geometry    Json
+  properties  Json
+}

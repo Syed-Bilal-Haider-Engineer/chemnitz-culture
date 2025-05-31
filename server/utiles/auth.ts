@@ -1,5 +1,4 @@
-
-import { IUserData } from '@/type/user';
+import { IUserData } from '@/src/type/user.type';
 import jwt, { SignOptions } from 'jsonwebtoken';
 
 export const getToken = (data: IUserData): string => {

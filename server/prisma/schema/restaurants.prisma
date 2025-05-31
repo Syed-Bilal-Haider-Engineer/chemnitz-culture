@@ -1,0 +1,11 @@
+model Restaurants {
+  type       String
+  id         String  @id @unique
+  addr_city  String? @map("addr:city")
+  amenity    String?
+  cuisine    String?
+  name       String?
+  operator   String?
+  geometry   Json
+  properties Json
+}
