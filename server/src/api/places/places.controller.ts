@@ -18,49 +18,47 @@ const placeAPI = async (req: Request, res: Response, next: NextFunction) => {
         },
       }),
       prisma.restaurants.findMany({
-         omit: {
+        omit: {
           name: true,
           amenity: true,
           cuisine: true,
           operator: true,
           addr_city: true,
-        }},
-      ),
+        },
+      }),
       prisma.theatres.findMany({
-         omit: {
+        omit: {
+          amenity: true,
           name: true,
-          tourism: true,
-          museum: true,
-          museum_type: true,
-          old_name: true,
-          operator: true,
-          addr_city: true,
-        }}),
+        },
+      }),
+
       prisma.artworks.findMany({
-         omit: {
+        omit: {
           name: true,
-          tourism: true,
           artist_name: true,
           artwork_type: true,
+          tourism: true,
           old_name: true,
           operator: true,
           addr_city: true,
-        }},),
+        },
+      }),
     ]);
 
-    console.log(museums, restaurants, theatres, artworks);
+    const allPlaces = [...museums, ...restaurants, ...theatres, ...artworks];
     res.status(StatusCodes.OK).json({
-      museums,
-      restaurants,
-      theatres,
-      artworks,
+      features: allPlaces.flat(),
+      count: allPlaces.length,
     });
+
   } catch (error) {
     console.error('Error fetching places:', error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: 'Internal server error' });
   }
+  next()
 };
 
 export default placeAPI;

@@ -1,12 +1,8 @@
 model Theatres {
   type       String
-  id           String  @id @unique
-  addr_city    String? @map("addr:city")
-  artist_name  String?
-  artwork_type String?
-  name         String?
-  tourism      String?
-  operator     String?
-  geometry     Json
-  properties   Json
+  id         String @id @default(uuid()) 
+  amenity    String?
+  name       String?
+  geometry   Json
+  properties Json
 }

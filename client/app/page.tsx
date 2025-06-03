@@ -2,7 +2,7 @@
 import Map from './components/Mapbox';
 import {useEffect, useState} from 'react';
 import {FeatureCollection} from 'geojson';
-import { features } from 'process';
+
 export default function Home() {
   const [geoData, setGeoData] = useState<FeatureCollection | null>(null);
   const [Resturants,setResturants] = useState<FeatureCollection | null>(null);
@@ -10,7 +10,7 @@ export default function Home() {
      fetch('/Chemnitz.json') // ✅ Make sure Chemnitz.json is in the public folder
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.features.length);
+        console.log(data.features);
         const filtered = data.features.filter(
           (f: any) => f?.properties?.tourism === 'museum'
         );

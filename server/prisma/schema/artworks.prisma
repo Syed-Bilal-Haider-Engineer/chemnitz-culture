@@ -1,13 +1,13 @@
 model Artworks {
   type       String
-  id          String  @id @unique
+  id          String @id @default(uuid()) 
   name        String?
   artist_name String?
   artwork_type String?
   tourism     String?
   old_name    String?
   operator    String?
-  addr_city   String? @map("addr:city")
+  addr_city   String?
   geometry    Json
   properties  Json
 }

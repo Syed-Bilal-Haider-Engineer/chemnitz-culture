@@ -1,7 +1,7 @@
 model Restaurants {
   type       String
-  id         String  @id @unique
-  addr_city  String? @map("addr:city")
+  id         String @id @default(uuid()) 
+  addr_city  String?
   amenity    String?
   cuisine    String?
   name       String?

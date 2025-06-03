@@ -4,3 +4,8 @@ export enum CategoryType {
   THEATRE = 'theatre',
   ARTWORK = 'artwork',
 }
+
+export enum CategoryKey {
+  AMENITY = 'amenity',
+  TOURISM = 'tourism'
+}
