@@ -1,11 +1,11 @@
-// routes.ts
+
 import { Router } from 'express';
-import { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import meusamAPI from './user.controller';
+import createUser, { updateUser } from './user.controller';
+import login from './login.controller';
 
 const router = Router();
-
-router.get('/meusam', meusamAPI);
+router.post('/createUser', createUser); 
+router.post('/login',login);
+router.put('/updateUser',updateUser)
 
 export default router;

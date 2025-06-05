@@ -5,7 +5,7 @@ export interface IUserData {
     role: Role
 }
 
-enum Role {
-    USER,
-    ADMIN
+export enum Role {
+    USER = 'user',
+    ADMIN = 'admin'
 }

@@ -1,8 +1,0 @@
-model Theatres {
-  type       String
-  id         String @id @default(uuid()) 
-  amenity    String?
-  name       String?
-  geometry   Json
-  properties Json
-}
