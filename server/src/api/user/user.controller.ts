@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import bcrypt from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
 import dotenv from 'dotenv';
+import { getPassword } from '@/utiles/auth';
 
 dotenv.config();
 
@@ -41,9 +41,8 @@ const createUser = async (
         .json({ message: 'Email already exists!' });
       return;
     }
-    const saltRounds = 10;
-    const hash = await bcrypt.hash(req.body.password, saltRounds);
-    console.log(hash, 'hash');
+
+    const hash = getPassword(req.body.password);
     const newUser = await prisma.user.create({
       data: { ...req.body, password: hash },
     });
@@ -67,9 +66,9 @@ export const updateUser = async (
 
     const schema = Joi.object({
       id: Joi.number().required(),
-      name: Joi.string().required(),
-      lat: Joi.number().required(),
-      lng: Joi.number().required(),
+      name: Joi.string().optional(),
+      lat: Joi.number().optional(),
+      lng: Joi.number().optional(),
     });
 
     const { error } = schema.validate(req.body);
@@ -82,21 +81,59 @@ export const updateUser = async (
     }
 
     const updateUser = await prisma.user.update({
+      omit: {
+        password: true,
+      },
       where: {
-        id: req.body?.id
+        id: req.body?.id,
       },
-      data: {
-        name:req.body?.name,
-        lat: req.body?.lat,
-        lng: req.body?.lng
-      },
+      data: req.body,
     });
-
+    console.log(updateUser, 'updateUser');
     res.status(StatusCodes.CREATED).json({
       message: 'User Update successfully',
-      user: updateUser
+      user: updateUser,
     });
   } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { prisma } = res.locals;
+
+    const schema = Joi.object({
+      id: Joi.number().required(),
+    });
+
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: error.details[0].message });
+      return;
+    }
+
+    const getUser = await prisma.user.findUnique({
+      omit: {
+        password: true,
+      },
+      where: {
+        id: req.body?.id,
+      },
+    });
+    console.log(getUser, 'getUser');
+    res.status(StatusCodes.OK).json({
+      user: getUser,
+    });
+  } catch (error: any) {
+    console.log(error.message);
     next(error);
   }
 };

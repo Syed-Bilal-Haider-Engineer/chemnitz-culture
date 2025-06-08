@@ -1,7 +1,6 @@
 export interface IUserData {
     name:string,
     email: string;
-    location: string;
     role: Role
 }
 

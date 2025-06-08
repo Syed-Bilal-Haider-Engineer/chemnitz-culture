@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-const featre = async (req: Request, res: Response, next: NextFunction) => {
+const feature = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { prisma } = res.locals;
 
@@ -18,4 +18,4 @@ const featre = async (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export default featre;
+export default feature;
