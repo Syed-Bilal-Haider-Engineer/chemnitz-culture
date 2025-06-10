@@ -1,7 +1,8 @@
-import { Request, Response } from 'express';
+import { throwError } from '../../../utiles/global';
+import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
-const search = async (req: Request, res: Response): Promise<void> => {
+const search = async (req: Request, res: Response,next:NextFunction): Promise<void> => {
   const { searchKeyword } = req.query;
   const { prisma } = res.locals;
   try {
@@ -19,13 +20,13 @@ const search = async (req: Request, res: Response): Promise<void> => {
     }
 
     const allFeatures = await prisma.feature.findMany();
-    const results = allFeatures.filter((feature: any) => {
+    const results = allFeatures?.filter((feature: any) => {
       const name = feature.properties?.name?.trim().toLowerCase();
       const alt = feature.properties?.alt_name?.trim().toLowerCase();
       return (
         name?.includes((searchKeyword as string).trim().toLowerCase()) ||
         alt?.includes((searchKeyword as string).trim().toLowerCase()) ||
-        feature.category?.includes(
+        feature?.category?.includes(
           (searchKeyword as string).trim().toLowerCase()
         )
       );
@@ -33,12 +34,13 @@ const search = async (req: Request, res: Response): Promise<void> => {
 
     res.status(StatusCodes.OK).json({
       results,
+      len: results.length
     });
   } catch (error) {
     console.error('Error search category:', error);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: 'Failed to fetch favorites' });
+      return next(
+          throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error')
+        );
   }
 };
 

@@ -1,3 +1,4 @@
+import { throwError } from '../../../utiles/global';
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
@@ -11,11 +12,41 @@ const feature = async (req: Request, res: Response, next: NextFunction) => {
     });
   } catch (error) {
     console.error('Error fetching places:', error);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: 'Internal server error' });
+    next(throwError(StatusCodes.NOT_FOUND, 'Internel server error'));
   }
-  next();
+};
+
+export const getFeatureDetails = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { prisma } = res.locals;
+    const { id } = req.body;
+
+    if (!id) {
+      return next(throwError(StatusCodes.NOT_FOUND, 'Feature ID is required!'));
+    }
+
+    const feature = await prisma.feature.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!feature) {
+      return next(throwError(StatusCodes.NOT_FOUND, 'Feature not found !'));
+    }
+
+    res.status(StatusCodes.OK).json({ feature });
+  } catch (error) {
+    console.error(
+      `Error fetching feature details for ID ${req.params.id}:`,
+      error
+    );
+    return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error'));
+  }
 };
 
 export default feature;

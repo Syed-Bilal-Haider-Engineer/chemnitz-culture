@@ -1,15 +1,20 @@
 import { IUserData } from '@/src/type/user.type';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 
-export const getToken = (data: IUserData): string => {
-  const secret = process.env.TOKEN_SECRET;
+dotenv.config();
+
+export const getToken = (data: IUserData) => {
+  const secret = process.env.JWT_SECRET;
   const expiresIn = process.env.TOKEN_EXPIRATION;
-
+ console.log(secret,"secret",expiresIn);
+ 
   if (!secret) throw new Error('TOKEN_SECRET is not defined');
   if (!expiresIn) throw new Error('TOKEN_EXPIRATION is not defined');
-
-  return jwt.sign({ ...data }, secret as string, { expiresIn } as SignOptions);
+   console.log(secret,"secret",expiresIn);
+   
+  return  jwt.sign({ ...data }, secret as string, { expiresIn } as SignOptions);
 };
 
 export const checkPassword = async (saved: string, provided: string) =>

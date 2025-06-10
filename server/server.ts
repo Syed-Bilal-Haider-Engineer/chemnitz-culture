@@ -4,8 +4,8 @@ import { PrismaClient } from '@prisma/client';
 import { corsOptions } from './src/config/cors';
 import helmet from 'helmet';
 import { getUser } from './utiles/global';
-import router from './src/api/user/user.routes';
-import placesRouter from './src/api/places/places.routes';
+import userRoutes from './src/api/user/user.routes';
+import placesRoutes from './src/api/places/places.routes';
 import favoriteRoutes from './src/api/favorites/favorites.routes';
 import filterRoutes from './src/api/filter/filter.routes';
 import searchRoutes from './src/api/search/search.routes';
@@ -16,6 +16,7 @@ const app = express();
 const prisma = new PrismaClient();
 
 const middleware = (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.headers,"req.headers?.authorization");
   const user = getUser(req.headers?.authorization);
   res.locals = { prisma, user };
   next();
@@ -29,8 +30,8 @@ app.use(middleware);
 
 app.use(
   '/api',
-  router,
-  placesRouter,
+  userRoutes,
+  placesRoutes,
   filterRoutes,
   favoriteRoutes,
   searchRoutes,

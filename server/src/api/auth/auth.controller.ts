@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import Joi from 'joi';
 import { StatusCodes } from 'http-status-codes';
 import { checkPassword, getToken } from '../../../utiles/auth';
-import { throwError } from '@/utiles/global';
+import { throwError } from '../../../utiles/global';
 
 dotenv.config();
 
@@ -31,19 +31,18 @@ const login = async (
     const IsCheckUser = await prisma.user.findUnique({
       where: { email: req.body.email },
     });
-    console.log(IsCheckUser, 'user');
+
     if (!IsCheckUser) {
-      return next(throwError(StatusCodes.NOT_FOUND));
-      return;
+      return next(throwError(StatusCodes.NOT_FOUND,"Email is incorrect!"));
     }
 
-    const passwordMatch = checkPassword(
+    const passwordMatch = await checkPassword(
       req.body.password,
       IsCheckUser.password
     );
     console.log('isMatch=>', passwordMatch);
 
-    if (!passwordMatch) return next(throwError(StatusCodes.UNAUTHORIZED));
+    if (!passwordMatch) return next(throwError(StatusCodes.UNAUTHORIZED,"Password is Incorrect!"));
 
     const user = {
       id: IsCheckUser.id,
@@ -54,10 +53,11 @@ const login = async (
 
     console.log(process.env.JWT_SECRET, 'JWT_SECRET');
     const token: string = getToken(user);
-
+    console.log(token,"token");
+    
     res.status(StatusCodes.OK).json({ user, token });
   } catch (error) {
-    next(throwError(StatusCodes.NOT_FOUND));
+   return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error'));
   }
 };
 

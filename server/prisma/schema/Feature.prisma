@@ -1,10 +1,11 @@
 model Feature {
-  type       String
-  id         String  @id @default(uuid())
-  category   String?
-  geometry   Json
-  properties Json
-  favoritedBy Favorite[] 
+  type        String
+  id          String     @id @default(uuid())
+  category    String?
+  geometry    Json
+  properties  Json
+  favoritedBy Favorite[]
+
   @@index([category])
   @@map("features")
 }

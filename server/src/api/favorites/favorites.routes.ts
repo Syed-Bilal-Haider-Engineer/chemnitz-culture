@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import  { addFavorite, findAllFavorite, removeFavorite } from './favorites.controller';
-import { StatusCodes } from 'http-status-codes';
 
 const favoriteRoutes = Router();
 favoriteRoutes.post('/addFavorite', addFavorite);

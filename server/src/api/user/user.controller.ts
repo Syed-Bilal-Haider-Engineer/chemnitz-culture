@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
 import dotenv from 'dotenv';
-import { getPassword } from '@/utiles/auth';
+import { getPassword } from '../../../utiles/auth';
+import { throwError } from '../../../utiles/global';
 
 dotenv.config();
 
@@ -36,23 +37,22 @@ const createUser = async (
     });
 
     if (isExistEmail) {
-      res
-        .status(StatusCodes.CONFLICT)
-        .json({ message: 'Email already exists!' });
-      return;
+      return next(throwError(StatusCodes.NOT_FOUND, 'Email already exists!'));
     }
 
-    const hash = getPassword(req.body.password);
+    const hash = await getPassword(req.body.password);
+    console.log('hash=>', hash);
+
     const newUser = await prisma.user.create({
       data: { ...req.body, password: hash },
     });
-
-    res.status(StatusCodes.CREATED).json({
-      message: 'User created successfully',
-      user: newUser,
-    });
+    if (newUser) {
+      res.status(StatusCodes.CREATED).json({
+        message: 'User created successfully',
+      });
+    }
   } catch (error) {
-    next(error);
+    return next(throwError(StatusCodes.NOT_FOUND, 'Internel server error!'));
   }
 };
 
@@ -95,7 +95,9 @@ export const updateUser = async (
       user: updateUser,
     });
   } catch (error) {
-    next(error);
+    return next(
+      throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error')
+    );
   }
 };
 
@@ -105,8 +107,8 @@ export const getUserProfile = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { prisma } = res.locals;
-
+    const { prisma,user } = res.locals;
+   console.log(user,"user")
     const schema = Joi.object({
       id: Joi.number().required(),
     });
@@ -125,7 +127,7 @@ export const getUserProfile = async (
         password: true,
       },
       where: {
-        id: req.body?.id,
+        id:user?.id,
       },
     });
     console.log(getUser, 'getUser');
@@ -134,7 +136,9 @@ export const getUserProfile = async (
     });
   } catch (error: any) {
     console.log(error.message);
-    next(error);
+    return next(
+      throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error')
+    );
   }
 };
 
