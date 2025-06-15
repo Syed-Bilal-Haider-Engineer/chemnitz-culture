@@ -1,9 +1,8 @@
 'use client';
-import Map from './map/Mapbox';
 import {useEffect, useState} from 'react';
 import {FeatureCollection} from 'geojson';
 import {Bell as BellIcon} from 'lucide-react';
-
+import Map from './Mapbox'
 export default function Home() {
   const [geoData, setGeoData] = useState<FeatureCollection | null>(null);
   const [Resturants, setResturants] = useState<FeatureCollection | null>(null);
