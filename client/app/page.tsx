@@ -1,45 +1,5 @@
-'use client';
-import Map from './map/Mapbox';
-import {useEffect, useState} from 'react';
-import {FeatureCollection} from 'geojson';
 import {Bell as BellIcon} from 'lucide-react';
-
-export default function Home() {
-  const [geoData, setGeoData] = useState<FeatureCollection | null>(null);
-  const [Resturants, setResturants] = useState<FeatureCollection | null>(null);
-  const getMeusams = () => {
-    fetch('/Chemnitz.json') // ✅ Make sure Chemnitz.json is in the public folder
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data.features);
-        const filtered = data.features.filter(
-          (f: any) => f?.properties?.tourism === 'museum'
-        );
-
-        const filteredResturants = data.features.filter(
-          (f: any) => f?.properties?.amenity === 'restaurant'
-        );
-        setResturants({
-          type: 'FeatureCollection',
-          features: filteredResturants,
-        });
-        setGeoData({
-          type: 'FeatureCollection',
-          features: filtered,
-        });
-
-        const filteredthearter = data.features.filter(
-          (f: any) => f?.properties?.amenity === 'theatre'
-        );
-
-        console.log(filteredthearter, 'filtered theatre');
-      });
-  };
-
-  useEffect(() => {
-    getMeusams();
-  }, []);
-
+export default async function Home() {
   return (
     <div className="flex items-center justify-between w-ful flex-col">
       <div className="flex items-center justify-between w-full p-1 px-6 bg-white
@@ -51,12 +11,6 @@ export default function Home() {
           </button>
         </div>
       </div>
-        {Resturants && (
-          <div className="w-full">
-            {' '}
-            <Map geoData={Resturants} />{' '}
-          </div>
-        )}
     </div>
   );
 }

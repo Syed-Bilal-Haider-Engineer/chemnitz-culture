@@ -1,76 +1,94 @@
-// components/SearchBar.tsx
-"use client";
-import { useState } from "react";
-import { Search, MapPin } from "lucide-react";
+'use client';
 
-const mockLocations = [
-  {
-    id: 1,
-    title: "Chemnitz Museum",
-    description: "Local history and art museum",
-    icon: <MapPin size={16} className="text-blue-500" />,
-  },
-  {
-    id: 2,
-    title: "City Center",
-    description: "Main shopping and business district",
-    icon: <MapPin size={16} className="text-blue-500" />,
-  },
-  {
-    id: 3,
-    title: "Kassberg District",
-    description: "Historic neighborhood with classic architecture",
-    icon: <MapPin size={16} className="text-blue-500" />,
-  },
-];
+import {useState} from 'react';
+import {Search} from 'lucide-react';
+import type {Feature} from 'geojson';
 
-export default function SearchBar() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+interface SearchBarProps {
+  geoData: any;
+  searchHanlde?: (key: string, value: string) => void;
+}
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const results = mockLocations.filter((location) =>
-      location.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      location.description.toLowerCase().includes(searchQuery.toLowerCase())
+export default function SearchBar({geoData, searchHanlde}: SearchBarProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Feature[]>([]);
+
+  const runSearch = (query: string) => {
+    const lowerQuery = query.toLowerCase();
+
+    const results = geoData.features.filter(
+      (feature: any) =>
+        feature?.properties?.name?.toLowerCase().includes(lowerQuery) ||
+        feature?.properties?.alt_name?.toLowerCase().includes(lowerQuery) ||
+        feature?.category?.toLowerCase().includes(lowerQuery)
     );
+
     setSearchResults(results);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    if (query.trim() === '') {
+      setSearchResults([]);
+    } else {
+      runSearch(query);
+    }
+  };
+
+  const handleSelect = (feature: any) => {
+    const name =
+      feature?.properties?.name ||
+      feature?.properties?.alt_name ||
+      feature?.category;
+
+    setSearchQuery(name);
+    setSearchResults([]);
+    console.log('Selected:', name);
+
+    // // Optional custom search handler
+    // if (searchHanlde) {
+    //   searchHanlde("search", name);
+    // }
+  };
+
+  const handleOnBlur = () => {
+    setTimeout(() => {
+      setSearchResults([]), setSearchQuery('');
+    }, 150);
+  };
   return (
     <div className="absolute top-4 left-5.5 z-10 w-[300px]">
-      <form onSubmit={handleSearch} className="relative">
+      <div className="relative">
         <input
           type="text"
           placeholder="Search locations..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={handleChange}
+          onBlur={handleOnBlur}
           className="w-full pl-8 pr-4 py-2 text-sm border border-gray-300 rounded-full shadow-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <Search size={16} className="absolute left-2 top-2.5 text-gray-400" />
-      </form>
+      </div>
 
       {searchResults.length > 0 && (
         <div className="mt-2 bg-white rounded-lg shadow-lg p-2 max-h-60 overflow-y-auto">
-          {searchResults.map((location) => (
-            <div
-              key={location.id}
-              className="p-2 rounded hover:bg-gray-100 cursor-pointer"
-              onClick={() => {
-                console.log("Selected:", location.title);
-                setSearchQuery("");
-                setSearchResults([]);
-              }}
-            >
-              <div className="flex items-start gap-2">
-                {location.icon}
-                <div>
-                  <p className="text-sm font-medium">{location.title}</p>
-                  <p className="text-xs text-gray-500">{location.description}</p>
-                </div>
+          {searchResults.map((feature: any) => {
+            const label =
+              feature?.properties?.name ||
+              feature?.properties?.alt_name ||
+              feature?.category;
+
+            return (
+              <div
+                key={feature.id}
+                className="p-2 rounded hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleSelect(feature)}
+              >
+                <p className="text-sm text-black font-medium">{label}</p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

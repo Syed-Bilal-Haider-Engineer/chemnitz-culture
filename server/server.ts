@@ -26,14 +26,14 @@ app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
-app.use(middleware);
+// app.use(middleware);
 
+app.use('/api',middleware,favoriteRoutes);
 app.use(
   '/api',
   userRoutes,
   placesRoutes,
   filterRoutes,
-  favoriteRoutes,
   searchRoutes,
   authRouters
 );

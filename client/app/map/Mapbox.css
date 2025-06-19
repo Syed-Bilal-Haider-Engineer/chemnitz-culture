@@ -20,3 +20,9 @@
 .mapboxgl-popup-close-button:hover {
   background-color: transparent; 
 }
+
+.mapboxgl-ctrl-top-right {
+  top: auto !important;  
+  bottom: 30px !important;  
+  right: 0 !important;     
+}

@@ -1,6 +1,6 @@
 // components/Map.tsx
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBar from '../components/SearchBar'
@@ -10,7 +10,7 @@ interface MapProps {
   geoData: any | null;
 }
 
-export default function Map({ geoData }: MapProps) {
+ function Map({ geoData }: MapProps) {
   const mapContainer = useRef<any>(null);
   const map = useRef<mapboxgl.Map | any>(null);
 
@@ -21,7 +21,7 @@ export default function Map({ geoData }: MapProps) {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [12.9214, 50.8323],
+      center: [10.9214, 50.8323],
       zoom: 15
     });
 
@@ -45,12 +45,12 @@ export default function Map({ geoData }: MapProps) {
         source: 'museums',
         paint: {
           'circle-radius': 6,
-          'circle-color': '#ff5200',
+          'circle-color': '#5CE65C',
           'circle-stroke-width': 1,
-          'circle-stroke-color': 'red',
+          'circle-stroke-color': '#FFFAFA',
         },
       });
-
+ 
       // Fit to museum data
       const bounds = new mapboxgl.LngLatBounds();
       geoData.features.forEach((feature: any) => {
@@ -98,11 +98,27 @@ export default function Map({ geoData }: MapProps) {
         map.current.getCanvas().style.cursor = '';
       });
     });
+
+     for (const marker of geoData.features) {
+      const el = document.createElement('div');
+      el.className = 'marker';
+      el.style.backgroundImage = `url(https://static.vecteezy.com/system/resources/previews/049/796/035/large_2x/girl-icon-symbol-illustration-isolated-on-white-background-vector.jpg)`;
+      el.style.width = `20px`;
+      el.style.height = `20px`;
+      el.style.backgroundSize = '100%';
+      el.style.display = 'block';
+      el.style.border = 'none';
+      el.style.borderRadius = '50%';
+      el.style.cursor = 'pointer';
+
+      new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .addTo(map.current);
+    }
   }, [geoData]);
 
   return (
-   <div id="map" className="relative">
-    <SearchBar />
+
     <div 
       ref={mapContainer}
       style={{
@@ -112,16 +128,8 @@ export default function Map({ geoData }: MapProps) {
         overflow: 'hidden',
       }}
     />
-      <div className="absolute top-4 right-4 flex gap-2 z-10">
-      <button className="flex items-center gap-1 bg-white px-3 py-1.5 rounded-lg shadow hover:bg-gray-100 transition">
-        <Shapes className="w-4 h-4 text-gray-600" />
-        <span className="text-sm font-medium text-gray-700">Select Category</span>
-      </button>
-      <button className="flex items-center gap-1 bg-white px-3 py-1.5 rounded-lg shadow hover:bg-gray-100 transition">
-        <ListFilterPlus className="w-4 h-4 text-gray-600" />
-        <span className="text-sm font-medium text-gray-700">Select Filter</span>
-      </button>
-  </div>
-  </div>
+     
   );
 }
+
+export default React.memo(Map)

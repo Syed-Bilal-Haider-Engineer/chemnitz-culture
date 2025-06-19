@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Map, Users, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { useSidebar } from '../context/SidebarContext';
+import { useSidebar } from '../../context/SidebarContext';
 // you can change icons as needed
 
 const navItems = [
