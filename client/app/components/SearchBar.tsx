@@ -1,78 +1,80 @@
 'use client';
 
-import {useState} from 'react';
-import {Search} from 'lucide-react';
-import type {Feature} from 'geojson';
+import { useState, useEffect } from 'react';
+import { CornerUpRight, Search, MapPin } from 'lucide-react';
+import type { Feature } from 'geojson';
 
 interface SearchBarProps {
   geoData: any;
   searchHanlde?: (key: string, value: string) => void;
 }
 
-export default function SearchBar({geoData, searchHanlde}: SearchBarProps) {
+export default function SearchBar({ geoData, searchHanlde }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Feature[]>([]);
 
+  // 🔹 Load initial 10 items
+  useEffect(() => {
+    if (geoData?.features?.length > 0) {
+      setSearchResults(geoData.features.slice(0, 20));
+    }
+  }, [geoData]);
+
+  // 🔍 Search filter
   const runSearch = (query: string) => {
     const lowerQuery = query.toLowerCase();
 
-    const results = geoData.features.filter(
-      (feature: any) =>
+    const results = geoData.features
+      .filter((feature: any) =>
         feature?.properties?.name?.toLowerCase().includes(lowerQuery) ||
         feature?.properties?.alt_name?.toLowerCase().includes(lowerQuery) ||
         feature?.category?.toLowerCase().includes(lowerQuery)
-    );
-
+      )
     setSearchResults(results);
   };
 
+  // ⌨️ Handle input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
     if (query.trim() === '') {
-      setSearchResults([]);
+      // 🟢 Reset to first 10
+      setSearchResults(geoData.features.slice(0, 10));
     } else {
       runSearch(query);
     }
   };
 
-  const handleSelect = (feature: any) => {
-    const name =
-      feature?.properties?.name ||
-      feature?.properties?.alt_name ||
-      feature?.category;
-
-    setSearchQuery(name);
-    setSearchResults([]);
-    console.log('Selected:', name);
-
-    // // Optional custom search handler
-    // if (searchHanlde) {
-    //   searchHanlde("search", name);
-    // }
+  const handleSelect = (label: string) => {
+    if (searchHanlde) {
+      searchHanlde('search', `searchKeyword=${label}`);
+    }
   };
 
   const handleOnBlur = () => {
     setTimeout(() => {
-      setSearchResults([]), setSearchQuery('');
-    }, 150);
+      setSearchQuery('');
+      setSearchResults(geoData.features.slice(0, 20));
+    }, 200);
   };
+ console.log("searchResults=>",searchResults)
   return (
-    <div className="absolute top-4 left-5.5 z-10 w-[300px]">
-      <div className="relative">
+    <div className="relative w-[250px] max-w-full bg-white overflow-y-auto" style={{height:'100vh'}}>
+      <div className="relative mt-3 mx-2">
         <input
           type="text"
-          placeholder="Search locations..."
+          placeholder="Search Location"
           value={searchQuery}
           onChange={handleChange}
           onBlur={handleOnBlur}
-          className="w-full pl-8 pr-4 py-2 text-sm border border-gray-300 rounded-full shadow-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full pl-10 pr-10 py-2 text-sm border border-gray-300 rounded-sm shadow focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
         />
-        <Search size={16} className="absolute left-2 top-2.5 text-gray-400" />
+        <Search size={18} className="absolute left-3 top-2.5 text-green-500" />
+        <CornerUpRight size={18} className="absolute right-3 top-2.5 text-green-500 cursor-pointer" />
       </div>
 
       {searchResults.length > 0 && (
-        <div className="mt-2 bg-white rounded-lg shadow-lg p-2 max-h-60 overflow-y-auto">
+        <div className=" rounded-lg ">
           {searchResults.map((feature: any) => {
             const label =
               feature?.properties?.name ||
@@ -80,12 +82,13 @@ export default function SearchBar({geoData, searchHanlde}: SearchBarProps) {
               feature?.category;
 
             return (
-              <div
+             <div
                 key={feature.id}
-                className="p-2 rounded hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleSelect(feature)}
+                className="flex items-center gap-2 px-3 py-3 border-b-1 border-green-200 hover:bg-gray-50 cursor-pointer"
+                onClick={() => handleSelect(label)}
               >
-                <p className="text-sm text-black font-medium">{label}</p>
+                <MapPin className="text-green-500 w-4 h-4" />
+                <div className="text-gray-800 text-sm">{label}</div>
               </div>
             );
           })}

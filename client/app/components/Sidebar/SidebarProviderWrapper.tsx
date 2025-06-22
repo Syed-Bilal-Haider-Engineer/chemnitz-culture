@@ -2,8 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
-import { SidebarProvider } from '@/app/context/SidebarContext';
-
+import Header from '../Header';
+import  Provider from '../../context/contextAPI';
 
 export default function SidebarProviderWrapper({
   children,
@@ -11,14 +11,18 @@ export default function SidebarProviderWrapper({
   children: React.ReactNode;
 }) {
   const path = usePathname();
-  const showSidebar = !['/login', '/signup','/details'].includes(path);
+  // const showSidebar = !['/login', '/signup','/details'].includes(path);
 
   return (
-    <SidebarProvider>
+    <Provider>
       <div className="flex min-h-screen">
-        {showSidebar && <Sidebar />}
-        <main className="flex-1 bg-gray-100">{children}</main>
+        {/* {showSidebar && <Sidebar />} */}
+         {<Sidebar />}
+        <main className="flex-1 bg-gray-100">
+           <Header/>
+          {children}
+          </main>
       </div>
-    </SidebarProvider>
+    </Provider>
   );
 }

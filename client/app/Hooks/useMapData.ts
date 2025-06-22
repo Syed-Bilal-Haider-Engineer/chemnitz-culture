@@ -12,15 +12,12 @@ export function useMapData() {
     try {
       const query = filters ? `?${new URLSearchParams(filters).toString()}` : '';
       const res = await fetch(`http://localhost:4000/api/${endpoint}${query}`);
-      
+      console.log("res==>",res)
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
       const data = await res.json();
       console.log('Raw API response:', data);
 
-      // Handle both response formats:
-      // 1. Standard GeoJSON with 'features'
-      // 2. Your custom format with 'results'
       const features = data.features || data.results || [];
       
       if (!Array.isArray(features)) {

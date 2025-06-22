@@ -1,7 +1,4 @@
-'use client';
-import React from 'react';
-import Image from 'next/image';
-import Navbar from '../components/Navbar';
+'use client'
 import {
   Phone,
   Wifi,
@@ -30,45 +27,26 @@ import {
   UserCog,
   ArrowUpDown,
   Users,
-  Ticket,
 } from 'lucide-react';
-import Card from '../components/Card/Card';
-import Footer from './../components/Footer';
+import { useSearchParams } from 'next/navigation';
+
 export const myLoader = () => {
   return `https://media.gettyimages.com/id/1409729992/de/foto/hektische-k%C3%B6che-die-in-einer-gesch%C3%A4ftigen-gro%C3%9Fk%C3%BCche-in-einem-restaurant-arbeiten.jpg?s=1024x1024&w=gi&k=20&c=CeE-qN_xgHmO0GnQePmBdo3gEvsHiUnXIHLdIiSvcng=`;
 };
 
 export default function Detail() {
+    const searchParams = useSearchParams();
+  const id = searchParams.get('id');
+  if (id) {
+  const decodedSlug = decodeURIComponent(id);
+  console.log("decoded", decodedSlug);
+} else {
+  console.warn("No ID provided in URL");
+}
+
   return (
     <>
-      <Navbar />
       <div className="font-sans text-gray-800 w-full px-20">
-        <div className="flex justify-between items-center gap-0.5 mt-3">
-          <div className="w-[60%] h-[448px] relative border-4 border-green-100">
-            <Image
-              loader={myLoader}
-              src="https://media.gettyimages.com/id/1409729992/de/foto/hektische-k%C3%B6che-die-in-einer-gesch%C3%A4ftigen-gro%C3%9Fk%C3%BCche-in-einem-restaurant-arbeiten.jpg?s=1024x1024&w=gi&k=20&c=CeE-qN_xgHmO0GnQePmBdo3gEvsHiUnXIHLdIiSvcng="
-              alt="Main Image"
-              fill
-              className="object-cover  rounded-t-2xl rounded-l-2xl"
-              unoptimized
-            />
-          </div>
-          <div className=" w-[40%] flex flex-col h-[448px] gap-1 mt-2">
-            {[1, 2].map((item, index) => (
-              <div key={index} className="relative h-[224px] w-full">
-                <Image
-                  loader={myLoader}
-                  src="https://media.gettyimages.com/id/1409729992/de/foto/hektische-k%C3%B6che-die-in-einer-gesch%C3%A4ftigen-gro%C3%9Fk%C3%BCche-in-einem-restaurant-arbeiten.jpg?s=1024x1024&w=gi&k=20&c=CeE-qN_xgHmO0GnQePmBdo3gEvsHiUnXIHLdIiSvcng="
-                  alt={`Room View ${index + 1}`}
-                  fill
-                  className="object-cover rounded-t-2xl rounded-r-2xl"
-                  unoptimized
-                />
-              </div>
-            ))}
-          </div>
-        </div>
         <div className="overflow-hidden">
           <div className="p-6 flex justify-between items-center gap-2">
             <div className="mt-8">
@@ -226,26 +204,15 @@ export default function Detail() {
                   Operated by: iQ Student Accommodation
                 </p>
               </div>
-              <button className="mt-6 w-full bg-green-400 hover:bg-green-500 text-white font-medium py-2 px-4 rounded-md transition duration-200">
-                Request Details
-              </button>
               <div className="mt-6 flex items-center text-sm text-gray-700">
                 <Phone className="w-4 h-4 mr-2" />
-                <span>Call now: 020 8... View Number</span>
+                <span>Call now: </span>
               </div>
             </div>
           </div>
         </div>
-         {/* Map */}
-        <div className="mb-6 mt-6">
-          <h2 className="text-xl font-bold mb-2">Location</h2>
-          <div className="w-full h-70 bg-gray-300 rounded flex items-center justify-center">
-            <span className="text-gray-700">[Dummy Map Placeholder]</span>
-          </div>
-        </div>
-        <Card/>
-        <Footer/>
       </div>
     </>
   );
 }
+

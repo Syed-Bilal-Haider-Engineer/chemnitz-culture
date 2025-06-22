@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Map, Users, UserCircle2, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
-import { myLoader } from '../details/page';
+import { myLoader } from './Footer';
 
 function Navbar() {
   const pathname = usePathname();

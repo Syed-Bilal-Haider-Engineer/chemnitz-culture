@@ -21,12 +21,13 @@ const search = async (req: Request, res: Response,next:NextFunction): Promise<vo
     }
 
     const allFeatures = await prisma.feature.findMany();
+    // console.log("allFeatures",allFeatures)
     const results = allFeatures?.filter((feature: any) => {
       // console.log("feature==>",feature)
       const name = feature.properties?.name?.trim().toLowerCase();
       const alt = feature.properties?.alt_name?.trim().toLowerCase();
       const category = feature.category?.trim().toLowerCase();
-      console.log(category,"category");
+      // console.log(category,"category");
       return (
         name?.includes((searchKeyword as string).trim().toLowerCase()) ||
         alt?.includes((searchKeyword as string).trim().toLowerCase()) ||

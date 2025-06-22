@@ -8,7 +8,7 @@ export const myLoader = () => {
 const Footer = () => {
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container w-full px-4 py-12">
         {/* Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Column 1: Information */}

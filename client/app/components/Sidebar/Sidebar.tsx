@@ -2,19 +2,19 @@
 "use client"
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Map, Users, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { useSidebar } from '../../context/SidebarContext';
+import { Home, Map, ChevronsLeft, ChevronsRight, HeartPlus } from 'lucide-react';
+import { useContextAPI } from '../../context/contextAPI';
 // you can change icons as needed
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: <Home size={20} /> },
-  { label: 'Map', href: '/', icon: <Map size={20} /> },
-  { label: 'Users', href: '/dashboard/users', icon: <Users size={20} /> },
+  { label: 'Map', href: '/map', icon: <Map size={20} /> },
+  { label: 'favorites', href: '/favorites', icon: <HeartPlus size={20} /> },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
-   const { isCollapsed,toggleSidebar } = useSidebar();
+   const { isCollapsed,toggleSidebar } = useContextAPI();
 
   return (
     <aside className={`

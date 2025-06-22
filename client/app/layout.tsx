@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import SidebarProviderWrapper from './components/Sidebar/SidebarProviderWrapper';
+;
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -19,17 +20,21 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <SidebarProviderWrapper>{children}</SidebarProviderWrapper>
+        <SidebarProviderWrapper>
+          {children}
+          </SidebarProviderWrapper>
+             <div id="react-portal"></div> 
       </body>
     </html>
   );

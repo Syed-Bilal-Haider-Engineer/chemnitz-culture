@@ -1,0 +1,128 @@
+'use client';
+import { BellIcon, UserCircle, LogIn, LogOut, UserPlus, Link } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useContextAPI } from '../context/contextAPI';
+const Header = () => {
+  const {setIsLogin,setIsSignUp } = useContextAPI()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter()
+  // Close dropdown when clicking outside or pressing Escape
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
+
+  // Mock authentication state - replace with your actual auth logic
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSignOut = () => {
+    // Add your sign out logic here
+    setIsLoggedIn(false);
+    setIsDropdownOpen(false);
+  };
+
+  const handleSignIn = () => {
+    // Add your sign in logic here
+    setIsLoggedIn(true);
+    setIsDropdownOpen(false);
+    setIsLogin((prev: boolean) => !prev)
+  };
+
+  const handlesetIsSignUp = () => {
+    setIsDropdownOpen(false);
+    setIsSignUp((prev: boolean) => !prev)
+  }
+
+  const handlesetIsProfile = () => {
+    setIsDropdownOpen(false);
+    setIsSignUp((prev: boolean) => !prev)
+  }
+  return (
+    <header className="flex items-center justify-between w-full px-4 py-1 bg-white border-b border-gray-200 shadow-sm">
+      <h1 className="font-bold text-lg">Map</h1>
+      
+      <div className="flex items-center gap-4">
+        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
+          <BellIcon className="w-5 h-5 text-gray-600" />
+        </button>
+        
+        {/* Profile dropdown */}
+        <div className="relative" ref={dropdownRef}>
+          <button 
+            onClick={toggleDropdown}
+            className="flex items-center cursor-pointer justify-center w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+            aria-label="Profile menu"
+            aria-expanded={isDropdownOpen}
+          >
+            <UserCircle className="w-5 h-5 text-gray-600" />
+          </button>
+          
+          {isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+              {isLoggedIn ? (
+                <>
+                  <button
+                    onClick={handlesetIsProfile}
+                    className="flex items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    <UserCircle className="w-4 h-4 mr-2" />
+                    Profile
+                  </button>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={handleSignIn}
+                    className="flex items-center px-4 cursor-pointer py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Sign In
+                  </button>
+                  <button
+                     onClick={handlesetIsSignUp}
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Sign up
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
