@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import Joi from 'joi';
 import { StatusCodes } from 'http-status-codes';
-import { checkPassword, getToken } from '../../../utiles/auth';
-import { throwError } from '../../../utiles/global';
+import { checkPassword, getToken } from '../../../utils/auth';
+import { throwError } from '../../../utils/global';
 
 dotenv.config();
 
@@ -57,7 +57,7 @@ const login = async (
     
     res.status(StatusCodes.OK).json({ user, token });
   } catch (error) {
-   return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error'));
+   return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error'));
   }
 };
 

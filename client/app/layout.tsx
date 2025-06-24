@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import SidebarProviderWrapper from './components/Sidebar/SidebarProviderWrapper';
-;
-
+import ReactQueryProvider from './services/QueryProvider';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -26,6 +25,7 @@ export default function RootLayout({
 }>) {
 
   return (
+     <ReactQueryProvider>
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -34,8 +34,11 @@ export default function RootLayout({
         <SidebarProviderWrapper>
           {children}
           </SidebarProviderWrapper>
-             <div id="react-portal"></div> 
+         <ReactQueryProvider>
+           <div id="react-portal"></div> 
+         </ReactQueryProvider>
       </body>
     </html>
+    </ReactQueryProvider>
   );
 }

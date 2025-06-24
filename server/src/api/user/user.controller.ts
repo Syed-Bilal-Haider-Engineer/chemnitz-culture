@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
 import dotenv from 'dotenv';
-import { getPassword } from '../../../utiles/auth';
-import { throwError } from '../../../utiles/global';
+import { getPassword } from '../../../utils/auth';
+import { throwError } from '../../../utils/global';
 
 dotenv.config();
 
@@ -21,8 +21,9 @@ const createUser = async (
       password: Joi.string().min(5).max(255).required(),
       lat: Joi.number().required(),
       lng: Joi.number().required(),
+      location: Joi.string().required()
     });
-
+     console.log("req.body==>",req.body)
     const { error } = schema.validate(req.body);
 
     if (error) {
@@ -52,7 +53,7 @@ const createUser = async (
       });
     }
   } catch (error) {
-    return next(throwError(StatusCodes.NOT_FOUND, 'Internel server error!'));
+    return next(throwError(StatusCodes.NOT_FOUND, 'Internal server error!'));
   }
 };
 
@@ -96,7 +97,7 @@ export const updateUser = async (
     });
   } catch (error) {
     return next(
-      throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error')
+      throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error')
     );
   }
 };
@@ -137,7 +138,7 @@ export const getUserProfile = async (
   } catch (error: any) {
     console.log(error.message);
     return next(
-      throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error')
+      throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error')
     );
   }
 };

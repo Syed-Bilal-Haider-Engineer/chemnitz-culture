@@ -62,6 +62,13 @@ const TextCardList = () => {
       rating: 4.8,
       reviews: 72
     },
+     {
+      title: 'Villa Esche',
+      description:
+        'An architectural gem built by Henry van de Velde, now a cultural and conference center.',
+      rating: 4.8,
+      reviews: 72
+    },
   ];
 
   return (

@@ -1,21 +1,17 @@
-// components/Sidebar.tsx
 "use client"
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Map, ChevronsLeft, ChevronsRight, HeartPlus } from 'lucide-react';
+import { Map, ChevronsLeft, ChevronsRight, HeartPlus } from 'lucide-react';
 import { useContextAPI } from '../../context/contextAPI';
-// you can change icons as needed
 
 const navItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: <Home size={20} /> },
-  { label: 'Map', href: '/map', icon: <Map size={20} /> },
+  { label: 'Map', href: '/', icon: <Map size={20} /> },
   { label: 'favorites', href: '/favorites', icon: <HeartPlus size={20} /> },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
-   const { isCollapsed,toggleSidebar } = useContextAPI();
-
+  const { isCollapsed,toggleSidebar } = useContextAPI();
   return (
     <aside className={`
       h-screen bg-white border-r  border-r-gray-200 py-3 px-2 flex flex-col gap-y-6
@@ -37,17 +33,17 @@ export default function Sidebar() {
             key={href}
             href={href}
             className={`
-              flex items-center gap-3 py-1.5 px-3 rounded-lg transition-colors
+              flex items-center gap-3 py-1.5 px-3 rounded-lg transition-colors hover:cursor-pointer
               ${pathname === href ? 'bg-green-100 text-green-600' : 'text-gray-700 hover:bg-gray-100'}
               ${isCollapsed ? 'justify-center' : ''}
               group
             `}
           >
-            <span className="min-w-[20px] flex justify-center">
+            <span className="min-w-[20px] flex justify-center hover:cursor-pointer">
               {icon}
             </span>
             {!isCollapsed && (
-              <span>{label}</span>
+              <span className="hover:cursor-pointer">{label}</span>
             )}
             {isCollapsed && (
               <span className="

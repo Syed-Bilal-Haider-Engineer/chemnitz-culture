@@ -11,22 +11,24 @@ import FormInput from "../../common/input";
 import Modal from "@/app/common/modal";
 import { useContextAPI } from "@/app/context/contextAPI";
 import { useLocation } from "@/app/services/useLocation";
-import { updateProfile } from "@/app/services/authAPI";
+import { signupUser } from "@/app/services/authAPI";
 import {
-  ProfileFormData,
-  ProfileFormValidate,
+  SignUpFormData,
+  signUpFormValidate,
 } from "@/app/validation/validation";
 
-const defaultValues: ProfileFormData = {
+const defaultValues: SignUpFormData = {
   name: "",
   email: "",
+  password: "",
+  confirmPassword: "",
   lat: 0,
   lng: 0,
   location: "",
 };
 
-export default function Profile() {
-  const { isProfile, setIsProfile } = useContextAPI();
+export default function SignupForm() {
+  const { isSignUp, setIsSignUp } = useContextAPI();
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
@@ -37,12 +39,25 @@ export default function Profile() {
     reset,
     watch,
     formState: { errors },
-  } = useForm<ProfileFormData>({
-    resolver: zodResolver(ProfileFormValidate),
+  } = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpFormValidate),
     defaultValues,
   });
 
   const { getCurrentLocation, fetchLocationName, isLoading,getLocationNameFromLatLng } = useLocation();
+
+  const handleGetLocation = async () => {
+    try {
+      const { lat, lng } = await getCurrentLocation();
+      const location = await fetchLocationName(lat, lng);
+      setValue("lat", lat);
+      setValue("lng", lng);
+      setValue("location", location || "Location found but could not get name");
+    } catch (err: any) {
+      setValue("location", err.message || "Failed to get location");
+    }
+  };
+
   const {location,lat,lng} = watch();
 
   useEffect(() => {
@@ -57,12 +72,12 @@ export default function Profile() {
   }, [location])
 
   const { mutate, isPending, isSuccess, isError } = useMutation({
-    mutationFn: updateProfile,
+    mutationFn: signupUser,
     onSuccess: (data) => {
-      setSuccessMsg("Update your profile successfully!");
+      setSuccessMsg("Account created successfully!");
       reset();
       setTimeout(() => {
-        setIsProfile(false);
+        setIsSignUp(false);
       }, 2000);
     },
     onError: (err: any) => {
@@ -70,25 +85,13 @@ export default function Profile() {
     },
   });
 
-  const handleGetLocation = async () => {
-    try {
-      const { lat, lng } = await getCurrentLocation();
-      const location = await fetchLocationName(lat, lng);
-      setValue("lat", lat);
-      setValue("lng", lng);
-      setValue("location", location || "Location found but could not get name");
-    } catch (err: any) {
-      setValue("location", err.message || "Failed to get location");
-    }
-  };
-
-  const onSubmit =  (data: ProfileFormData) => {
+  const onSubmit =  (data: SignUpFormData) => {
       mutate(data);
   };
 
   return (
     <>
-      {isProfile && (
+      {isSignUp && (
         <Modal>
           <div className="fixed inset-0 flex items-center justify-center p-3 mt-2">
             <Head>
@@ -99,7 +102,7 @@ export default function Profile() {
               <div className="flex justify-end">
                 <button
                   className="text-gray-500 cursor-pointer hover:bg-gray-200 rounded-sm p-1"
-                  onClick={() => setIsProfile(false)}
+                  onClick={() => setIsSignUp(false)}
                 >
                   <X className="w-5 h-5 text-black" />
                 </button>
@@ -107,10 +110,10 @@ export default function Profile() {
 
               <div className="mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">
-                  Edit
+                  Create New Account
                 </h2>
                 <p className="text-gray-500 mt-1">
-                  Fill in your details to Profile
+                  Fill in your details to register
                 </p>
               </div>
 
@@ -122,7 +125,8 @@ export default function Profile() {
               )}
 
               <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                  <div className="w-full">
+                <div className="flex justify-between items-center gap-3">
+                  <div className="w-[50%]">
                     <FormInput
                       type="text"
                       label="Name"
@@ -132,18 +136,43 @@ export default function Profile() {
                       disabled={false}
                     />
                   </div>
-                  <div className="w-full">
+                  <div className="w-[50%]">
                     <FormInput
                       label="Email"
                       type="email"
                       placeholder="Enter email"
                       {...register("email")}
                       error={errors.email?.message}
-                      disabled={true}
+                      disabled={false}
                     />
+                  </div>
                 </div>
 
-                <div className="w-full">
+                <div className="flex justify-between items-center gap-3">
+                  <div className="w-[50%]">
+                    <FormInput
+                      label="Password"
+                      type="password"
+
+                      placeholder="Create password"
+                      {...register("password")}
+                      error={errors.password?.message}
+                      disabled={false}
+                    />
+                  </div>
+                  <div className="w-[50%]">
+                    <FormInput
+                      label="Confirm Password"
+                      type="password"
+                      placeholder="Confirm password"
+                      {...register("confirmPassword")}
+                      error={errors.confirmPassword?.message}
+                      disabled={false}
+                    />
+                  </div>
+                </div>
+
+                <div className="w-[50%]">
                   <FormInput
                     type="text"
                     label="Location"
@@ -167,17 +196,17 @@ export default function Profile() {
                 <div className="flex justify-end gap-3 pt-4">
                   <button
                     type="button"
-                    onClick={() => setIsProfile(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg cursor-pointer text-gray-700 hover:bg-gray-50"
+                    onClick={() => setIsSignUp(false)}
+                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isPending}
-                    className="px-4 py-2 bg-green-600 rounded-lg text-white cursor-pointer hover:bg-green-700"
+                    className="px-4 py-2 bg-green-600 rounded-lg text-white hover:bg-green-700"
                   >
-                    {isPending ? "Updating..." : "Update"}
+                    {isPending ? "Creating..." : "Create Account"}
                   </button>
                 </div>
               </form>

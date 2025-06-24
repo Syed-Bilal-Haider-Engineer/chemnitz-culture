@@ -1,12 +1,10 @@
 'use client';
 import dynamic from 'next/dynamic';
 import {useCallback, useEffect, useState} from 'react';
-import {useMapData} from '../Hooks/useMapData';
+import {useMapData} from '../services/useMapData';
 import type {FeatureCollection} from 'geojson';
 import CategorySelect from '../components/Filter';
-import LoginPage from '../(auth)/login/login';
 import { useContextAPI } from '../context/contextAPI';
-import SignupForm from '../(auth)/register/singup';
 
 const Map = dynamic(() => import('./Mapbox'), {ssr: false});
 const SearchBar = dynamic(() => import('../components/SearchBar'), {
@@ -54,8 +52,7 @@ export default function MapPage() {
           />
         </div>
       </div>
-      { isLogin && <LoginPage/>}
-      { isSignUp && <SignupForm/>}
+    
     </div>
   );
 }

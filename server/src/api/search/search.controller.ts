@@ -1,4 +1,4 @@
-import { throwError } from '../../../utiles/global';
+import { throwError } from '../../../utils/global';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useContextAPI } from '../context/contextAPI';
 const Header = () => {
-  const {setIsLogin,setIsSignUp } = useContextAPI()
+  const {setIsLogin,setIsSignUp,setIsProfile } = useContextAPI()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter()
@@ -51,14 +51,14 @@ const Header = () => {
     setIsLogin((prev: boolean) => !prev)
   };
 
-  const handlesetIsSignUp = () => {
+  const handleSetIsSignUp = () => {
     setIsDropdownOpen(false);
     setIsSignUp((prev: boolean) => !prev)
   }
 
-  const handlesetIsProfile = () => {
+  const handleSetIsProfile = () => {
     setIsDropdownOpen(false);
-    setIsSignUp((prev: boolean) => !prev)
+    setIsProfile((prev: boolean) => !prev)
   }
   return (
     <header className="flex items-center justify-between w-full px-4 py-1 bg-white border-b border-gray-200 shadow-sm">
@@ -85,7 +85,7 @@ const Header = () => {
               {isLoggedIn ? (
                 <>
                   <button
-                    onClick={handlesetIsProfile}
+                    onClick={handleSetIsProfile}
                     className="flex items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                   >
                     <UserCircle className="w-4 h-4 mr-2" />
@@ -109,7 +109,7 @@ const Header = () => {
                     Sign In
                   </button>
                   <button
-                     onClick={handlesetIsSignUp}
+                     onClick={handleSetIsSignUp}
                     className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                   >
                     <UserPlus className="w-4 h-4 mr-2" />

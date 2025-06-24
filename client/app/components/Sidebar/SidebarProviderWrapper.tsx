@@ -1,17 +1,14 @@
 'use client';
-
-import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 import Header from '../Header';
 import  Provider from '../../context/contextAPI';
+import Common from './../../common/common';
 
 export default function SidebarProviderWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const path = usePathname();
-  // const showSidebar = !['/login', '/signup','/details'].includes(path);
 
   return (
     <Provider>
@@ -21,6 +18,7 @@ export default function SidebarProviderWrapper({
         <main className="flex-1 bg-gray-100">
            <Header/>
           {children}
+          <Common/>
           </main>
       </div>
     </Provider>
