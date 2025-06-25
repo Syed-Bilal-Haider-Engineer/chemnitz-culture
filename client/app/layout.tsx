@@ -25,20 +25,19 @@ export default function RootLayout({
 }>) {
 
   return (
-     <ReactQueryProvider>
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <SidebarProviderWrapper>
-          {children}
+        <ReactQueryProvider>
+          <SidebarProviderWrapper>
+            {children}
           </SidebarProviderWrapper>
-         <ReactQueryProvider>
-           <div id="react-portal"></div> 
-         </ReactQueryProvider>
+          <div id="react-portal"></div>
+        </ReactQueryProvider>
       </body>
     </html>
-    </ReactQueryProvider>
+
   );
 }

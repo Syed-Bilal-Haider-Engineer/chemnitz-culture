@@ -11,7 +11,7 @@ import FormInput from "../../common/input";
 import Modal from "@/app/common/modal";
 import { useContextAPI } from "@/app/context/contextAPI";
 import { useLocation } from "@/app/services/useLocation";
-import { signupUser } from "@/app/services/authAPI";
+import { signupUser } from "@/app/services/userService";
 import {
   SignUpFormData,
   signUpFormValidate,
@@ -50,6 +50,7 @@ export default function SignupForm() {
     try {
       const { lat, lng } = await getCurrentLocation();
       const location = await fetchLocationName(lat, lng);
+      console.log(" lat, lng ", lat, lng )
       setValue("lat", lat);
       setValue("lng", lng);
       setValue("location", location || "Location found but could not get name");

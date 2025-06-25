@@ -33,7 +33,7 @@ export default function MapPage() {
   );
 
   if (error) return <div>Error: {error}</div>;
-
+ 
   return (
     <div className="flex w-full h-[calc(100vh-40px)]">
       {/* Sidebar Search */}
@@ -43,7 +43,7 @@ export default function MapPage() {
       </div>
       <div className="flex-1 relative p-1">
         <div
-          className="w-full h-full rounded-2xl  shadow-lg overflow-hidden"
+          className="w-full rounded-2xl  shadow-lg overflow-hidden"
           style={{boxShadow: '0 4px 12px rgba(0, 128, 0, 0.1)'}}
         >
           <Map geoData={geoData} key={JSON.stringify(geoData)} />

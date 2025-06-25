@@ -1,3 +1,4 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 export async function loginUser({
   email,
   password,
@@ -5,7 +6,7 @@ export async function loginUser({
   email: string;
   password: string;
 }) {
-  console.log("email=>",email,"password=>",password)
+  console.log("email=>", email, "password=>", password);
   const res = await fetch("http://localhost:4000/api/login", {
     method: "POST",
     headers: {
@@ -13,12 +14,12 @@ export async function loginUser({
     },
     body: JSON.stringify({ email, password }),
   });
-   console.log("res",res);
+  console.log("res", res);
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.message || "Login failed");
   }
-  return res.json(); 
+  return res.json();
 }
 
 // services/authAPI.ts
@@ -51,7 +52,7 @@ export const signupUser = async ({
       location,
     }),
   });
- console.log("res==>",res)
+  console.log("res==>", res);
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || "Interval server error");
@@ -60,35 +61,55 @@ export const signupUser = async ({
   return res.json();
 };
 
+export const getUserProfile = async ({
+  queryKey,
+}: QueryFunctionContext<[string, string]>) => {
+  const [, token] = queryKey;
+  const res = await fetch("http://localhost:4000/api/getUserProfileDetails", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  console.log("res==>", res);
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Interval server error");
+  }
 
-// services/authAPI.ts
-export const updateProfile = async ({
-  name,
-  email,
-  lat,
-  lng,
-  location,
-}: {
+  return res.json();
+};
+
+export const updateProfile = async ({name, lat, lng, location,token}: {
   name: string;
-  email: string;
   lat: number;
   lng: number;
   location: string;
+  token: string;
 }) => {
-  const res = await fetch("http://localhost:4000/api/signup", {
-    method: "POST",
+  console.log(
+    "name,email,lat,lng,location,token",
+    name,
+    lat,
+    lng,
+    location,
+    token
+  );
+  const res = await fetch("http://localhost:4000/api/updateUser", {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       name,
-      email,
       lat,
       lng,
       location,
     }),
   });
- console.log("res==>",res)
+  console.log("res==>", res);
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || "Interval server error");

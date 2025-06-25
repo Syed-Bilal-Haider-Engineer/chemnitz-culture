@@ -24,15 +24,15 @@ export const getFeatureDetails = async (
 ) => {
   try {
     const { prisma } = res.locals;
-    const { id } = req.body;
+    const { featureId } = req.query; 
 
-    if (!id) {
+    if (!featureId) {
       return next(throwError(StatusCodes.NOT_FOUND, 'Feature ID is required!'));
     }
 
     const feature = await prisma.feature.findUnique({
       where: {
-        id: id,
+        id: featureId,
       },
     });
 

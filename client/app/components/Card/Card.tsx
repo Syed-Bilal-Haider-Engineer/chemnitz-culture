@@ -1,20 +1,23 @@
+'use client';
 import React from 'react';
 import { Star, Eye } from 'lucide-react';
+import Link  from 'next/link';
 
 interface TextCardProps {
+  id:string;
   title: string;
   description: string;
-  rating: number;
-  reviews: number;
+  rating?: number;
+  reviews?: number;
   onView?: () => void;
 }
 
 const TextCard: React.FC<TextCardProps> = ({
+    id,
   title,
   description,
-  rating,
-  reviews,
-  onView
+  rating = 3,
+  reviews = 0,
 }) => {
   return (
     <div className="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-all">
@@ -27,60 +30,42 @@ const TextCard: React.FC<TextCardProps> = ({
           {rating.toFixed(1)}
           <span className="text-gray-500 ml-1">({reviews} reviews)</span>
         </div>
+        <Link
+        href={{ pathname: '/details', query: { id: encodeURIComponent(id) } }}
+        style={{ textDecoration: 'none', cursor:'pointer', border: 'none', outline: 'none' }}
+      >
         <button
           className="flex items-center gap-1 text-green-600 text-sm hover:underline"
-          onClick={onView}
         >
           <Eye className="w-4 h-4" />
           View
         </button>
+        </Link>
       </div>
     </div>
   );
 };
 
-const TextCardList = () => {
-  const data = [
-    {
-      title: 'Chemnitz Opera House',
-      description:
-        'A prominent landmark known for classic and modern performances, contributing to the city’s rich cultural scene.',
-      rating: 4.7,
-      reviews: 98
-    },
-    {
-      title: 'Kunstsammlungen Museum',
-      description:
-        'This museum showcases a fine collection of modern art and historic exhibitions.',
-      rating: 4.5,
-      reviews: 54
-    },
-    {
-      title: 'Villa Esche',
-      description:
-        'An architectural gem built by Henry van de Velde, now a cultural and conference center.',
-      rating: 4.8,
-      reviews: 72
-    },
-     {
-      title: 'Villa Esche',
-      description:
-        'An architectural gem built by Henry van de Velde, now a cultural and conference center.',
-      rating: 4.8,
-      reviews: 72
-    },
-  ];
-
+ const TextCardList = (props:any) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-      {data.map((item, index) => (
+      {(props.data || []).map((item:any, index:any) => (
         <TextCard
-          key={index}
-          title={item.title}
-          description={item.description}
-          rating={item.rating}
-          reviews={item.reviews}
-          onView={() => alert(`Viewing ${item.title}`)}
+          key={item?.featureId + index}
+          id={item?.featureId}
+          title={
+            item.post?.properties?.name ||
+            item.post?.properties?.artwork_type ||
+            'Untitled'
+          }
+          description={
+            item.post?.properties?.description ||
+            item.post?.properties?.amenity ||
+            item.post?.properties?.tourism ||
+            'An architectural gem in Chemnitz.'
+          }
+          rating={item.rating ?? 4.2}
+          reviews={item.reviews ?? 50}
         />
       ))}
     </div>

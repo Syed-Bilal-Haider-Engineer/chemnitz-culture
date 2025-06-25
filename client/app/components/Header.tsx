@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useContextAPI } from '../context/contextAPI';
 const Header = () => {
-  const {setIsLogin,setIsSignUp,setIsProfile } = useContextAPI()
+  const {setIsLogin,setIsSignUp,setIsProfile, setTokenState} = useContextAPI()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter()
@@ -42,6 +42,10 @@ const Header = () => {
     // Add your sign out logic here
     setIsLoggedIn(false);
     setIsDropdownOpen(false);
+    if(localStorage.getItem('token')){
+      localStorage.removeItem('token');
+      setTokenState('')
+    }
   };
 
   const handleSignIn = () => {

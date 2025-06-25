@@ -1,28 +1,31 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, Map, Users, UserCircle2, ChevronDown } from 'lucide-react';
-import Image from 'next/image';
-import { myLoader } from './Footer';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Home, Map, Users, UserCircle2, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { myLoader } from "./Footer";
 
 function Navbar() {
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const navItems = [
-    { label: 'Dashboard', href: '/dashboard', icon: <Home size={20} /> },
-    { label: 'Map View', href: '/dashboard/map', icon: <Map size={20} /> },
-    { label: 'Users', href: '/dashboard/users', icon: <Users size={20} /> },
+    { label: "Dashboard", href: "/dashboard", icon: <Home size={20} /> },
+    { label: "Map View", href: "/dashboard/map", icon: <Map size={20} /> },
+    { label: "Users", href: "/dashboard/users", icon: <Users size={20} /> },
   ];
 
   return (
     <header className="flex items-center justify-between px-6 py-3 bg-white border-b border-green-100 shadow-sm">
-      <Link href="/" className="text-lg font-bold text-green-600 flex items-center gap-2">
+      <Link
+        href="/"
+        className="text-lg font-bold text-green-600 flex items-center gap-2"
+      >
         <Image
-        loader={myLoader}
-          src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" 
+          loader={myLoader}
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"
           alt="Logo"
           width={32}
           height={32}
@@ -36,8 +39,8 @@ function Navbar() {
             href={href}
             className={`flex items-center gap-2 px-3 py-2 rounded-md transition ${
               pathname === href
-                ? 'bg-green-50 text-green-600'
-                : 'text-gray-700 hover:bg-gray-100'
+                ? "bg-green-50 text-green-600"
+                : "text-gray-700 hover:bg-gray-100"
             }`}
           >
             {icon}

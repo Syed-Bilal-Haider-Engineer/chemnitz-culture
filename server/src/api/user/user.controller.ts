@@ -63,13 +63,13 @@ export const updateUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { prisma } = res.locals;
-
+    const { prisma,user } = res.locals;
+   
     const schema = Joi.object({
-      id: Joi.number().required(),
       name: Joi.string().optional(),
       lat: Joi.number().optional(),
       lng: Joi.number().optional(),
+      location: Joi.string().optional()
     });
 
     const { error } = schema.validate(req.body);
@@ -80,13 +80,13 @@ export const updateUser = async (
         .json({ message: error.details[0].message });
       return;
     }
-
+  console.log(req.body,"req body",user)
     const updateUser = await prisma.user.update({
       omit: {
         password: true,
       },
       where: {
-        id: req.body?.id,
+        id: user?.id,
       },
       data: req.body,
     });
@@ -109,12 +109,12 @@ export const getUserProfile = async (
 ): Promise<void> => {
   try {
     const { prisma,user } = res.locals;
-   console.log(user,"user")
+  //  console.log(user,"user")
     const schema = Joi.object({
       id: Joi.number().required(),
     });
 
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate({id:user?.id});
 
     if (error) {
       res
@@ -131,7 +131,7 @@ export const getUserProfile = async (
         id:user?.id,
       },
     });
-    console.log(getUser, 'getUser');
+    // console.log(getUser, 'getUser');
     res.status(StatusCodes.OK).json({
       user: getUser,
     });

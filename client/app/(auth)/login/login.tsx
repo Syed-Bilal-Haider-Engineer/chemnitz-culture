@@ -4,7 +4,7 @@ import Head from "next/head";
 import Modal from "../../common/modal";
 import { useContextAPI } from "@/app/context/contextAPI";
 import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "@/app/services/authAPI";
+import { loginUser } from "@/app/services/userService";
 import FormInput from "../../common/input";
 import { LoginFormData, LoginFormValidate } from "@/app/validation/validation";
 import { useForm } from "react-hook-form";
@@ -16,7 +16,7 @@ const defaultValues: LoginFormData = {
   password: "",
 };
 export default function LoginPage() {
-  const { isLogin, setIsLogin } = useContextAPI();
+  const { isLogin, setIsLogin,setTokenState } = useContextAPI();
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
@@ -37,6 +37,7 @@ export default function LoginPage() {
       console.log("data==>", data);
       reset();
       localStorage.setItem("token",data.token)
+      setTokenState(data.token)
       setTimeout(() => {
         setIsLogin(false);
       }, 2000);

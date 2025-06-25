@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 export const useLocation = () => {
   const [locationName, setLocationName] = useState('');
@@ -7,12 +8,13 @@ export const useLocation = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-      );
-      const data = await response.json();
-      setLocationName(data.display_name);
-      return data.display_name;
+      // const {data} = await axios.get(
+      //   `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+      // );
+      const key ="pk.eyJ1IjoiYmlsYWxzaGFoIiwiYSI6ImNsYjI0dHpocjAweDIzbnFlYTRvbWQydXgifQ.3Bj60LFS6nt7WYVfh3ZeNw"
+       const {data} = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${key}`)
+      setLocationName(data.features?.[0]?.place_name || null);
+      return data?.display_name;
     } catch (err) {
       setError('Failed to fetch location name');
       console.error(err);

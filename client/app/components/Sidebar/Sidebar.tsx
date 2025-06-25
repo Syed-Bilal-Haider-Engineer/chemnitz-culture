@@ -1,32 +1,34 @@
-"use client"
+'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Map, ChevronsLeft, ChevronsRight, HeartPlus } from 'lucide-react';
 import { useContextAPI } from '../../context/contextAPI';
 
-const navItems = [
-  { label: 'Map', href: '/', icon: <Map size={20} /> },
-  { label: 'favorites', href: '/favorites', icon: <HeartPlus size={20} /> },
-];
-
 export default function Sidebar() {
   const pathname = usePathname();
-  const { isCollapsed,toggleSidebar } = useContextAPI();
+  const { isCollapsed, toggleSidebar, token } = useContextAPI();
+
+  const navItems = [
+    { label: 'Map', href: '/', icon: <Map size={20} /> },
+    ...(token ? [{ label: 'Favorites', href: '/favorites', icon: <HeartPlus size={20} /> }] : []),
+  ];
+
   return (
     <aside className={`
-      h-screen bg-white border-r  border-r-gray-200 py-3 px-2 flex flex-col gap-y-6
+      h-screen bg-white border-r border-gray-200 py-3 px-2 flex flex-col gap-y-6
       transition-all duration-300 ease-in-out shadow-sm shadow-gray-200
       ${isCollapsed ? 'w-[60px]' : 'w-[200px]'}
     `}>
-     <div className={`flex ${isCollapsed ? 'flex-col' : ''} justify-between items-center`}>
-          <span className={`text-base font-medium ${isCollapsed && 'mt-2'}`}>Chemnitz Culture</span>
-          <button 
+      <div className={`flex ${isCollapsed ? 'flex-col' : ''} justify-between items-center`}>
+        <span className={`text-base font-medium ${isCollapsed && 'mt-2'}`}>Chemnitz Culture</span>
+        <button
           onClick={toggleSidebar}
           className="p-1 rounded-md hover:bg-gray-100 transition-colors hover:cursor-pointer"
         >
           {isCollapsed ? <ChevronsRight size={20} /> : <ChevronsLeft size={20} />}
         </button>
-     </div> 
+      </div>
+
       <nav className="flex flex-col gap-y-2">
         {navItems.map(({ label, href, icon }) => (
           <Link
