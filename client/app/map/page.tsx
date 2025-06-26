@@ -1,10 +1,11 @@
 'use client';
 import dynamic from 'next/dynamic';
 import {useCallback, useEffect, useState} from 'react';
-import {useMapData} from '../services/useMapData';
 import type {FeatureCollection} from 'geojson';
 import CategorySelect from '../components/Filter';
 import { useContextAPI } from '../context/contextAPI';
+import { getAllPlaces, searchPlacesByKeyword } from '../services/mapService';
+import { useQuery } from '@tanstack/react-query';
 
 const Map = dynamic(() => import('./Mapbox'), {ssr: false});
 const SearchBar = dynamic(() => import('../components/SearchBar'), {
@@ -12,31 +13,44 @@ const SearchBar = dynamic(() => import('../components/SearchBar'), {
 });
 
 export default function MapPage() {
-  const {loading, error, fetchData} = useMapData();
   const {isLogin, isSignUp, isProfile} = useContextAPI()
-  const [geoData, setGeoData] = useState<FeatureCollection | null>(null);
 
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await fetchData('features');
-      if (data) setGeoData(data);
-    };
-    loadData();
-  }, [fetchData]);
+    const {
+  data,
+  isLoading,
+  isError,
+} = useQuery<FeatureCollection, Error>({
+  queryKey: ["allPlaces"],
+  queryFn: getAllPlaces,
+  staleTime: 5 * 60 * 1000,
+  gcTime: 10 * 60 * 1000,
+});
 
-  const handleSearch = useCallback(
-    async (endpoint: string, query: string) => {
-      const data = await fetchData(endpoint, query);
-      if (data) setGeoData(data);
-    },
-    [fetchData]
-  );
+// This state will hold data for display (initial or search)
+const [geoData, setGeoData] = useState<FeatureCollection | null>(null);
 
-  if (error) return <div>Error: {error}</div>;
- 
+// Set geoData when query data loads
+useEffect(() => {
+  if (data) setGeoData(data);
+}, [data]);
+
+// Update geoData when search is used
+const handleSearch = useCallback(
+  async (query: string) => {
+    const result = await searchPlacesByKeyword(query);
+    setGeoData(result);
+  },
+  [searchPlacesByKeyword]
+);
+
+const handleCategeries = async(category:string) => {
+    const result = await searchPlacesByKeyword(category);
+    setGeoData(result);
+}
+
   return (
     <div className="flex w-full h-[calc(100vh-40px)]">
-      {/* Sidebar Search */}
+  
       <div className={`w-[250px] bg-white border-r border-green-200 shadow-md rounded-r-2xl 
         ${ !isLogin || !isSignUp || !isProfile && 'z-10' } `}>
         {geoData && <SearchBar geoData={geoData} searchHanlde={handleSearch} />}
@@ -48,7 +62,7 @@ export default function MapPage() {
         >
           <Map geoData={geoData} key={JSON.stringify(geoData)} />
           <CategorySelect
-            onSelect={(category) => console.log('Selected:', category)}
+            onSelect={handleCategeries}
           />
         </div>
       </div>

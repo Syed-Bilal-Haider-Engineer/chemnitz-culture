@@ -2,7 +2,7 @@
 import React from 'react';
 import { Star, Eye } from 'lucide-react';
 import Link  from 'next/link';
-
+import FavoriteFunctionality from '../common/FavoriteFunctionality';
 interface TextCardProps {
   id:string;
   title: string;
@@ -10,6 +10,7 @@ interface TextCardProps {
   rating?: number;
   reviews?: number;
   onView?: () => void;
+  token:string
 }
 
 const TextCard: React.FC<TextCardProps> = ({
@@ -18,6 +19,7 @@ const TextCard: React.FC<TextCardProps> = ({
   description,
   rating = 3,
   reviews = 0,
+  token
 }) => {
   return (
     <div className="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-all">
@@ -31,16 +33,17 @@ const TextCard: React.FC<TextCardProps> = ({
           <span className="text-gray-500 ml-1">({reviews} reviews)</span>
         </div>
         <Link
-        href={{ pathname: '/details', query: { id: encodeURIComponent(id) } }}
-        style={{ textDecoration: 'none', cursor:'pointer', border: 'none', outline: 'none' }}
+        href={{ pathname: '/placeViewDetails', query: { id: encodeURIComponent(id) } }}
+        style={{ textDecoration: 'none', border: 'none', outline: 'none' }}
       >
         <button
-          className="flex items-center gap-1 text-green-600 text-sm hover:underline"
+          className="flex items-center cursor-pointer gap-1 text-green-600 text-sm hover:underline"
         >
           <Eye className="w-4 h-4" />
           View
         </button>
         </Link>
+        <FavoriteFunctionality id={id} token={token}/>
       </div>
     </div>
   );
@@ -66,6 +69,7 @@ const TextCard: React.FC<TextCardProps> = ({
           }
           rating={item.rating ?? 4.2}
           reviews={item.reviews ?? 50}
+          token={props.token}
         />
       ))}
     </div>

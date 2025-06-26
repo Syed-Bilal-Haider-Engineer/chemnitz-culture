@@ -6,7 +6,7 @@ import type { Feature } from 'geojson';
 
 interface SearchBarProps {
   geoData: any;
-  searchHanlde?: (key: string, value: string) => void;
+  searchHanlde?: (key: string) => void;
 }
 
 export default function SearchBar({ geoData, searchHanlde }: SearchBarProps) {
@@ -46,8 +46,8 @@ export default function SearchBar({ geoData, searchHanlde }: SearchBarProps) {
   };
 
   const handleSelect = (label: string) => {
-    if (searchHanlde) {
-      searchHanlde('search', `searchKeyword=${label}`);
+    if (searchHanlde && label) {
+      searchHanlde(`${label}`);
     }
   };
 
@@ -57,30 +57,18 @@ export default function SearchBar({ geoData, searchHanlde }: SearchBarProps) {
       setSearchResults(geoData.features.slice(0, 20));
     }, 200);
   };
- console.log("searchResults=>",searchResults)
-  return (
-    <div className="relative w-[250px] max-w-full bg-white overflow-y-auto" style={{height:'100vh'}}>
-      <div className="relative mt-3 mx-2">
-        <input
-          type="text"
-          placeholder="Search Location"
-          value={searchQuery}
-          onChange={handleChange}
-          onBlur={handleOnBlur}
-          className="w-full pl-10 pr-10 py-2 text-sm border border-gray-300 rounded-sm shadow focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
-        />
-        <Search size={18} className="absolute left-3 top-2.5 text-green-500" />
-        <CornerUpRight size={18} className="absolute right-3 top-2.5 text-green-500 cursor-pointer" />
-      </div>
 
-      {searchResults.length > 0 && (
-        <div className=" rounded-lg ">
-          {searchResults.map((feature: any) => {
-            const label =
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === 'Enter') {
+    handleSelect(e.currentTarget.value)
+  }
+}
+
+  const renderList = (feature:any) => {
+     const label =
               feature?.properties?.name ||
               feature?.properties?.alt_name ||
               feature?.category;
-
             return (
              <div
                 key={feature.id}
@@ -91,6 +79,28 @@ export default function SearchBar({ geoData, searchHanlde }: SearchBarProps) {
                 <div className="text-gray-800 text-sm">{label}</div>
               </div>
             );
+  }
+ 
+  return (
+    <div className="relative w-[250px] max-w-full bg-white overflow-y-auto" style={{height:'100vh'}}>
+      <div className="relative mt-3 mx-2">
+        <input
+          type="text"
+          placeholder="Search Location"
+          value={searchQuery}
+          onChange={handleChange}
+          onBlur={handleOnBlur}
+           onKeyUp={handleKeyUp}
+          className="w-full pl-10 pr-10 py-2 text-sm border border-gray-300 rounded-sm shadow focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
+        />
+        <Search size={18} className="absolute left-3 top-2.5 text-green-500" />
+        <CornerUpRight size={18} className="absolute right-3 top-2.5 text-green-500 cursor-pointer" />
+      </div>
+
+      {searchResults.length > 0 && (
+        <div className=" rounded-lg ">
+          {searchResults.map((feature: any) => {
+             return renderList(feature)
           })}
         </div>
       )}
