@@ -7,15 +7,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import FormInput from "../../common/input";
-import Modal from "@/app/common/modal";
-import { useContextAPI } from "@/app/context/contextAPI";
-import { useLocation } from "@/app/services/useLocation";
-import { getUserProfile, updateProfile } from "@/app/services/userService";
+import FormInput from "../../components/common/input";
+import Modal from "@/app/components/common/modal";
+import { useContextAPI } from "@/app/_lib/context/contextAPI";
+import { useLocation } from "@/app/_lib/hooks/useLocation";
+import { getUserProfile, updateProfile } from "@/app/_lib/services/userService";
 import {
   ProfileFormData,
   ProfileFormValidate,
-} from "@/app/validation/validation";
+} from "@/app/_lib/validation/validation";
 
 const defaultValues: ProfileFormData = {
   name: "",
@@ -91,7 +91,6 @@ export default function Profile() {
     try {
       const { lat, lng } = await getCurrentLocation();
       if( lat && lng) {
-        console.log("lat, lng",lat, lng)
       const location = await fetchLocationName(lat, lng);
       setValue("lat", lat);
       setValue("lng", lng);

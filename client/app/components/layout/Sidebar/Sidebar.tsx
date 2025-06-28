@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Map, ChevronsLeft, ChevronsRight, HeartPlus } from 'lucide-react';
-import { useContextAPI } from '../../context/contextAPI';
+import { useContextAPI } from '../../../_lib/context/contextAPI';
 
 export default function Sidebar() {
   const pathname = usePathname();

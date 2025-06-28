@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import FavoriteFunctionality from '../common/FavoriteFunctionality';
+import FavoriteFunctionality from './FavoriteFunctionality';
 
 interface PopupCardProps {
   id: string;

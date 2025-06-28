@@ -1,6 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌍 Chemnitz Cultural Explorer
 
-## Getting Started
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0-blue)](https://nodejs.org/)
+[![PostgreSQL Version](https://img.shields.io/badge/postgresql-%3E%3D14.0-blue)](https://www.postgresql.org/)
+
+![App Preview](public/images/app-preview.gif)
+
+An interactive web platform showcasing cultural landmarks in Chemnitz, Germany, powered by open data sources with personalized touring features.
+
+## ✨ Key Features
+
+### 🗺️ Exploration Tools
+- Interactive map with 150+ cultural sites
+- Custom categories: Museums, Theaters, Public Art, Historic Sites
+- Real-time filtering by:
+  - Distance from current location
+  - Categories
+  - Keyword based search
+
+### 👤 User Experience
+- **Personalized Accounts**:
+  - Display places data on mapbox
+  - Save favorite locations
+  - Create User account
+  - List of favorite sites
+  - Display details of saved sites and sites
+
+### 🚀 Technical Highlights
+- Offline-first PWA support
+- Optimized routing algorithms
+- Accessibility compliant (WCAG 2.1 AA)
+
+## 🛠️ Technology Stack
+
+### Frontend
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Next.js 15 | React Framework |
+| Mapbox GL JS | Interactive Maps |
+| Tailwind CSS | Utility-first CSS |
+| React Query | Data Fetching |
+
+### Backend
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Node.js | Runtime |
+| Express | API Server |
+| PostgreSQL | Database |
+| PostGIS | Geospatial Queries |
+| Prisma | ORM |
+
+### DevOps
+| Technology | Purpose |
+|------------|---------|
+| Docker | Containerization |
+| GitHub | Git |
+| Git | Error Monitoring |
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- PostgreSQL 14+ with PostGIS extension
+- Mapbox API key
+- Overpass API endpoint
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Syed-Bilal-Haider-Engineer/chemnitz-culture
+   cd chemnitz-culture
+   cd client
+   cd server
+Set up environment variables
+
+bash
+cp .env.example .env.local
+# Edit the file with your credentials
+Install dependencies
 
 First, run the development server:
 
@@ -14,23 +91,64 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+bash
+# Run migrations
+npm run db:migrate
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Seed initial data
+npm run db:seed
+Running the Application
+Development Mode
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+bash
+npm run dev
+Production Build
 
-## Learn More
+bash
+npm run build
+npm start
+📂 Project Structure
+text
+.
+├── app/                  # Next.js app router
+│   ├── (auth)/          # Authentication routes
+│   ├── (_lib)           # API routes
+├── components/          # Reusable components
+│   ├── layout/          # Layouts
+│   └── common/          # Reuseabliity
 
-To learn more about Next.js, take a look at the following resources:
+├── public/              # Static assets
+├── styles/              # Global styles
+└── types/               # TypeScript definitions
+🌐 API Documentation
+Base URL
+https://api.chemnitz-culture.com/v1
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Key Endpoints
+Endpoint	Method	Description	Auth Required
+/sites	GET	List all cultural sites	No
+/sites/search	GET	Search with filters	No
+/favorites	POST	Add favorite	Yes
+/itineraries	POST	Create route	Yes
+View Complete API Documentation →
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🔒 Security Features
+JWT Authentication
 
-## Deploy on Vercel
+Role-based access control
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Data encryption at rest
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Automated security headers
+
+🚴 Performance
+Metric	Value	Target
+LCP	1.2s	<2.5s
+TTI	1.8s	<3.5s
+Bundle Size	145kB	<200kB
+📱 Offline Support
+Service Worker caching (Workbox)
+
+Localstorage for local data
+
+Background sync for updates

@@ -1,8 +1,8 @@
 'use client';
 import Sidebar from './Sidebar';
 import Header from '../Header';
-import  Provider from '../../context/contextAPI';
-import Common from './../../common/common';
+import  Provider from '../../../_lib/context/contextAPI';
+import Common from '../../common/common';
 
 export default function SidebarProviderWrapper({
   children,

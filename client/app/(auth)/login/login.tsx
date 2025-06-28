@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
 import Head from "next/head";
-import Modal from "../../common/modal";
-import { useContextAPI } from "@/app/context/contextAPI";
+import Modal from "../../components/common/modal";
+import { useContextAPI } from "@/app/_lib/context/contextAPI";
 import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "@/app/services/userService";
-import FormInput from "../../common/input";
-import { LoginFormData, LoginFormValidate } from "@/app/validation/validation";
+import { loginUser } from "@/app/_lib/services/userService";
+import FormInput from "../../components/common/input";
+import { LoginFormData, LoginFormValidate } from "@/app/_lib/validation/validation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";

@@ -2,7 +2,7 @@
 import { BellIcon, UserCircle, LogIn, LogOut, UserPlus, Link } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useContextAPI } from '../context/contextAPI';
+import { useContextAPI } from '../../_lib/context/contextAPI';
 const Header = () => {
   const {setIsLogin,setIsSignUp,setIsProfile, setTokenState} = useContextAPI()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

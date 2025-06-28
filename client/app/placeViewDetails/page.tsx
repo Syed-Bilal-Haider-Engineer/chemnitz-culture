@@ -7,11 +7,12 @@ import {
   Dumbbell, Table2, Tv, Wrench, ClipboardList, Book, Film, CircleDollarSign,
   HeartPulse, Beer, Trees, Sofa, Calendar, UserCog, ArrowUpDown, Users,ArrowLeft
 } from 'lucide-react';
-import { getPlaceViewDetails } from '../services/viewService';
-import { useContextAPI } from '../context/contextAPI';
-import FavoriteFunctionality from '../common/FavoriteFunctionality';
+import { getPlaceViewDetails } from '../_lib/services/viewService';
+import { useContextAPI } from '../_lib/context/contextAPI';
+import FavoriteFunctionality from '../components/common/FavoriteFunctionality';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import ErrorMessage from '../components/specialized/ErrorMessage';
 
 export default function PlaceViewDetails() {
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function PlaceViewDetails() {
   const id = searchParams.get('id');
   const decodedId = id ? decodeURIComponent(id) : null;
 
-  const { data, refetch, error } = useQuery({
+  const { data, refetch,isError, error } = useQuery({
     queryKey: ['favorite', token!, decodedId!],
     queryFn: getPlaceViewDetails,
     enabled: !!token && !!decodedId,
@@ -30,6 +31,17 @@ export default function PlaceViewDetails() {
       refetch()
     }
   },[id,token])
+
+  
+if (isError) {
+    return (
+      <ErrorMessage
+        message={error?.message || 'Failed to load Details Place.'}
+        onRetry={refetch}
+      />
+    )
+}
+
   const place = data?.feature;
   const props = place?.properties || {};
 

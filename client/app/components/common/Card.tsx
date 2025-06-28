@@ -2,7 +2,12 @@
 import React from 'react';
 import { Star, Eye } from 'lucide-react';
 import Link  from 'next/link';
-import FavoriteFunctionality from '../common/FavoriteFunctionality';
+import FavoriteFunctionality from './FavoriteFunctionality';
+import { useQuery } from '@tanstack/react-query'
+import { useContextAPI } from '../../_lib/context/contextAPI';
+import { findAllFavorites } from '../../_lib/services/favoriteService'
+import Loader from '../../components/specialized/Loader'
+import ErrorMessage from '../../components/specialized/ErrorMessage';
 interface TextCardProps {
   id:string;
   title: string;
@@ -10,7 +15,8 @@ interface TextCardProps {
   rating?: number;
   reviews?: number;
   onView?: () => void;
-  token:string
+  token:string;
+  refetch?: () => void
 }
 
 const TextCard: React.FC<TextCardProps> = ({
@@ -19,7 +25,8 @@ const TextCard: React.FC<TextCardProps> = ({
   description,
   rating = 3,
   reviews = 0,
-  token
+  token,
+  refetch
 }) => {
   return (
     <div className="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-all">
@@ -43,16 +50,52 @@ const TextCard: React.FC<TextCardProps> = ({
           View
         </button>
         </Link>
-        <FavoriteFunctionality id={id} token={token}/>
+        <FavoriteFunctionality id={id} token={token}   onFavoriteChange={refetch}/>
       </div>
     </div>
   );
 };
 
- const TextCardList = (props:any) => {
+ const TextCardList = () => {
+    const { token } = useContextAPI()
+
+  const { 
+    data, 
+    isLoading, 
+    isError, 
+    error,
+    refetch:refetchFavorites
+  } = useQuery({
+    queryKey: ['findAllFavorites', token],
+    queryFn: findAllFavorites, 
+    enabled: !!token,
+    staleTime: 5 * 60 * 1000, 
+    retry: 2
+  })
+
+  if (isLoading) {
+    return <Loader/>
+  }
+
+  if (isError) {
+    return (
+      <ErrorMessage
+        message={error?.message || 'Failed to load favorites.'}
+        onRetry={refetchFavorites}
+      />
+    )
+  }
+
+  if (!data?.length) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-gray-500">No favorites found</p>
+      </div>
+    )
+  }
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-      {(props.data || []).map((item:any, index:any) => (
+      {(data || [])?.map((item:any, index:any) => (
         <TextCard
           key={item?.featureId + index}
           id={item?.featureId}
@@ -69,7 +112,8 @@ const TextCard: React.FC<TextCardProps> = ({
           }
           rating={item.rating ?? 4.2}
           reviews={item.reviews ?? 50}
-          token={props.token}
+          token={token}
+          refetch={() => refetchFavorites()}
         />
       ))}
     </div>

@@ -80,3 +80,21 @@ export const searchPlacesByKeyword  = async (query:any): Promise<FeatureCollecti
 
   return geoData;
 };
+
+export const searchPlacesByCategory  = async (query:any): Promise<FeatureCollection> => {
+
+  const { data } = await axios.get(`${API_BASE}/filter?category=${query}`);
+
+  const features = data.features || data.results || [];
+
+  if (!Array.isArray(features)) {
+    throw new Error("Invalid features array in API response.");
+  }
+
+  const geoData: FeatureCollection = {
+    type: 'FeatureCollection',
+    features
+  };
+
+  return geoData;
+};
