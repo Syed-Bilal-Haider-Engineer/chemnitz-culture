@@ -1,11 +1,10 @@
 import { throwError } from '../../../utils/global';
 import { Request, Response, NextFunction } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import { PrismaClient } from '@prisma/client';
+import { StatusCodes } from 'http-status-codes';;
 
-const prisma = new PrismaClient()
 const feature = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const {prisma} = res.locals;
     const features = await prisma.feature.findMany({});
     console.log(features.length,"features")
     res.status(StatusCodes.OK).json({

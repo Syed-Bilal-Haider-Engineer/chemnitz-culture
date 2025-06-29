@@ -38,7 +38,7 @@ const createUser = async (
     });
 
     if (isExistEmail) {
-      return next(throwError(StatusCodes.NOT_FOUND, 'Email already exists!'));
+      return next(throwError(StatusCodes.CONFLICT, 'Email already exists!'));
     }
 
     const hash = await getPassword(req.body.password);

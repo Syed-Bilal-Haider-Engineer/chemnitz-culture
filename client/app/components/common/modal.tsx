@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import '../../_lib/styles/modal.css';
 import { createPortal } from 'react-dom';
 
 interface ModalProps {
@@ -16,10 +15,10 @@ function Modal({ children }: ModalProps) {
     setPortalRoot(el);
   }, []);
 
-  if (!portalRoot) return null; // Wait until DOM is ready
+  if (!portalRoot) return null; 
 
   return createPortal(
-    <div id="myModal" className="modal">
+    <div id="myModal" className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 px-4 sm:px-6">
       {children}
     </div>,
     portalRoot

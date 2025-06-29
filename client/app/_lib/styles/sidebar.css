@@ -1,0 +1,5 @@
+.menu{
+    @media (width <= 760px) {
+        display: none !important;
+    }
+}

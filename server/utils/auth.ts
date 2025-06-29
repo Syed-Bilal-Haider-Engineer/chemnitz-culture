@@ -8,11 +8,11 @@ dotenv.config();
 export const getToken = (data: IUserData) => {
   const secret = process.env.JWT_SECRET;
   const expiresIn = process.env.TOKEN_EXPIRATION;
- console.log(secret,"secret",expiresIn);
+//  console.log(secret,"secret",expiresIn);
  
   if (!secret) throw new Error('TOKEN_SECRET is not defined');
   if (!expiresIn) throw new Error('TOKEN_EXPIRATION is not defined');
-   console.log(secret,"secret",expiresIn);
+  //  console.log(secret,"secret",expiresIn);
    
   return  jwt.sign({ ...data }, secret as string, { expiresIn } as SignOptions);
 };

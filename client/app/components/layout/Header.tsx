@@ -1,13 +1,16 @@
 'use client';
-import { BellIcon, UserCircle, LogIn, LogOut, UserPlus, Link } from 'lucide-react';
+import { BellIcon, UserCircle, LogOut, UserPlus } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useContextAPI } from '../../_lib/context/contextAPI';
+
 const Header = () => {
+
   const {setIsLogin,setIsSignUp,setIsProfile, setTokenState} = useContextAPI()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter()
+  const router = useRouter();
+
   // Close dropdown when clicking outside or pressing Escape
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,6 +49,7 @@ const Header = () => {
       localStorage.removeItem('token');
       setTokenState('')
     }
+    router.push('/')
   };
 
   const handleSignIn = () => {

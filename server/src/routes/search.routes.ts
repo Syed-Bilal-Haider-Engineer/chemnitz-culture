@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import search from './search.controller';
+import search from '../api/search/search.controller';
 
 const searchRoutes = Router();
 searchRoutes.get('/search', search);

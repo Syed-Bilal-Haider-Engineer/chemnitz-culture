@@ -22,12 +22,12 @@ export default function PlaceViewDetails() {
   const decodedId = id ? decodeURIComponent(id) : null;
 
   const { data, refetch,isError, error } = useQuery({
-    queryKey: ['favorite', token!, decodedId!],
+    queryKey: ['getPlaceDetails', decodedId!],
     queryFn: getPlaceViewDetails,
-    enabled: !!token && !!decodedId,
+    enabled: !decodedId,
   });
   useEffect(() => {
-    if(id && token){
+    if(id){
       refetch()
     }
   },[id,token])

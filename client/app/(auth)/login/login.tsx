@@ -32,15 +32,13 @@ export default function LoginPage() {
 
   const { mutate, isPending, isSuccess, isError } = useMutation({
     mutationFn: loginUser,
+   // Update the onSuccess handler:
     onSuccess: (data) => {
       setSuccessMsg("Login successfully!");
-      console.log("data==>", data);
+      localStorage.setItem("token", data.token);
+      setTokenState(data.token); // This will trigger verification in context
       reset();
-      localStorage.setItem("token",data.token)
-      setTokenState(data.token)
-      setTimeout(() => {
-        setIsLogin(false);
-      }, 2000);
+      setTimeout(() => setIsLogin(false), 2000);
     },
     onError: (err: any) => {
       setErrorMsg(err.message || "Something went wrong");

@@ -6,6 +6,7 @@
     "target": "esnext",
     "declaration": true,
     "sourceMap": true,
+    "resolveJsonModule":true,
     "outDir": "dist",
     "strict": true,
     "lib": ["es5", "es6", "dom", "esnext"],

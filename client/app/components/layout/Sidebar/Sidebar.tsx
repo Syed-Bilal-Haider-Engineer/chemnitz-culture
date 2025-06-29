@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Map, ChevronsLeft, ChevronsRight, HeartPlus } from 'lucide-react';
 import { useContextAPI } from '../../../_lib/context/contextAPI';
-
+import '../../../_lib/styles/sidebar.css'
 export default function Sidebar() {
   const pathname = usePathname();
   const { isCollapsed, toggleSidebar, token } = useContextAPI();
-
+ console.log("sidebar token=>",token)
   const navItems = [
     { label: 'Map', href: '/', icon: <Map size={20} /> },
     ...(token ? [{ label: 'Favorites', href: '/favorites', icon: <HeartPlus size={20} /> }] : []),
@@ -16,11 +16,11 @@ export default function Sidebar() {
   return (
     <aside className={`
       h-screen bg-white border-r border-gray-200 py-3 px-2 flex flex-col gap-y-6
-      transition-all duration-300 ease-in-out shadow-sm shadow-gray-200
-      ${isCollapsed ? 'w-[60px]' : 'w-[200px]'}
+      transition-all duration-300 ease-in-out shadow-sm shadow-gray-200 
+      ${isCollapsed ? 'w-[60px]' : ' w-[60px] md:w-[200px]'}
     `}>
-      <div className={`flex ${isCollapsed ? 'flex-col' : ''} justify-between items-center`}>
-        <span className={`text-base font-medium ${isCollapsed && 'mt-2'}`}>Chemnitz Culture</span>
+      <div className={`flex ${isCollapsed ? 'flex-col' : ' flex-col md:flex-row'} justify-between items-center`}>
+        <span className={`text-2xl font-bold ml-2 ${isCollapsed && 'mt-2'}`}>KultLink</span>
         <button
           onClick={toggleSidebar}
           className="p-1 rounded-md hover:bg-gray-100 transition-colors hover:cursor-pointer"
@@ -45,17 +45,7 @@ export default function Sidebar() {
               {icon}
             </span>
             {!isCollapsed && (
-              <span className="hover:cursor-pointer">{label}</span>
-            )}
-            {isCollapsed && (
-              <span className="
-                absolute left-full ml-4 px-2 py-1 rounded-md
-                bg-gray-800 text-white text-sm
-                invisible opacity-0 group-hover:visible group-hover:opacity-100
-                transition-opacity duration-200
-              ">
-                {label}
-              </span>
+              <span className=" menu md:block text-sm  hover:cursor-pointer transition-opacity duration-200">{label}</span>
             )}
           </Link>
         ))}
@@ -64,7 +54,7 @@ export default function Sidebar() {
       {isCollapsed && (
         <div className="mt-auto text-center">
           <span className="text-xs text-gray-500 rotate-90 inline-block origin-center whitespace-nowrap">
-            Chemnitz
+            KultLink
           </span>
         </div>
       )}
