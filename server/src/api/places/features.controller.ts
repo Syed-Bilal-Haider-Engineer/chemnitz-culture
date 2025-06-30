@@ -33,6 +33,9 @@ export const getFeatureDetails = async (
       where: {
         id: featureId,
       },
+      include: {
+        review: true
+      },
     });
 
     if (!feature) {

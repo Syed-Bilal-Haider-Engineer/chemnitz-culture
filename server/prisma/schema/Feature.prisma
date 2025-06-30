@@ -5,7 +5,7 @@ model Feature {
   geometry    Json
   properties  Json
   favoritedBy Favorite[]
-
+  review   Review  []
   @@index([category])
   @@map("features")
 }

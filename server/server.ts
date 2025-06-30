@@ -13,6 +13,7 @@ import { prismaContext } from './middleware/prismaInjectContext';
 import swaggerUI from 'swagger-ui-express';
 import swaggerDocument from './swagger-output.json';
 import authenticateRouter from './src/routes/authenticate.routes';
+import reviewsRouter from './src/routes/review.route';
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -29,7 +30,8 @@ app.use(
   filterRoutes,
   searchRoutes,
   authRouters,
-  authenticateRouter
+  authenticateRouter,
+  reviewsRouter
 );
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));

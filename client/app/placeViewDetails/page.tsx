@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import {
   Phone, Wifi, Bike, Car, Video, User, Lock, Utensils, Drumstick, Bed, Key,
@@ -13,27 +13,31 @@ import FavoriteFunctionality from '../components/common/FavoriteFunctionality';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ErrorMessage from '../components/specialized/ErrorMessage';
+import Loader from '../components/specialized/Loader';
+import { ReviewSection } from '../_lib/review/review';
+import { addReview } from '../_lib/services/reviewService';
 
 export default function PlaceViewDetails() {
+
   const router = useRouter();
   const { token } = useContextAPI();
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const decodedId = id ? decodeURIComponent(id) : null;
-
-  const { data, refetch,isError, error } = useQuery({
+  const { data, refetch,isError,isLoading, error } = useQuery({
     queryKey: ['getPlaceDetails', decodedId!],
     queryFn: getPlaceViewDetails,
     enabled: !decodedId,
   });
+   
+
   useEffect(() => {
     if(id){
       refetch()
     }
   },[id,token])
 
-  
-if (isError) {
+  if (isError) {
     return (
       <ErrorMessage
         message={error?.message || 'Failed to load Details Place.'}
@@ -42,9 +46,34 @@ if (isError) {
     )
 }
 
-  const place = data?.feature;
-  const props = place?.properties || {};
+if (isLoading) return <Loader />
+const place = data?.feature;
+const props = place?.properties || {};
+const reviews = place?.review || [];
 
+const averageRating = reviews?.length > 0 
+    ? reviews.reduce((sum:Number, review:any) => sum + review.rating, 0) / reviews.length
+    : 0;
+
+const handleReviewSubmit = async(rating: number, comment: string) => {
+  if (!decodedId || !token) return;
+  
+  try {
+   const response = await addReview({
+      featureId: decodedId,
+      rating,
+      comment,
+      token
+    });
+    if(response.ok){
+      refetch()
+    }
+  } catch (error) {
+    console.error('Failed to submit review:', error);
+    throw error;
+  }
+}
+console.log("data==>",data)
   return (
     <div className="font-sans text-gray-800 w-full px-6 sm:px-20">
       <div className="overflow-hidden">
@@ -127,7 +156,15 @@ if (isError) {
             </div>
             
           </div>
-        </div>
+          </div>
+          {/* reviews sections */}
+         <ReviewSection
+            reviews={reviews}
+            averageRating={averageRating}
+            featureId={decodedId || ''}
+            onReviewSubmit={handleReviewSubmit}
+            token={token}
+          />
       </div>
     </div>
   );
@@ -141,3 +178,5 @@ function FeatureItem({ icon, label }: { icon: React.ReactNode; label: string }) 
     </div>
   );
 }
+
+

@@ -86,7 +86,8 @@ export default function SignupForm() {
     },
   });
 
-  const onSubmit =  (data: SignUpFormData) => {
+  const onSubmit = (data: SignUpFormData) => {
+    console.log(data,"data signup")
       mutate(data);
   };
 
@@ -198,14 +199,14 @@ export default function SignupForm() {
                   <button
                     type="button"
                     onClick={() => setIsSignUp(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                    className="px-4 py-2 borde cursor-pointer border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isPending}
-                    className="px-4 py-2 bg-green-600 rounded-lg text-white hover:bg-green-700"
+                    className="px-4 py-2 bg-green-600  cursor-pointer rounded-lg text-white hover:bg-green-700"
                   >
                     {isPending ? "Creating..." : "Create Account"}
                   </button>

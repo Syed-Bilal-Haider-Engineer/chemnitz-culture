@@ -6,7 +6,7 @@ import { useContextAPI } from '../../_lib/context/contextAPI';
 
 const Header = () => {
 
-  const {setIsLogin,setIsSignUp,setIsProfile, setTokenState} = useContextAPI()
+  const {setIsLogin,setIsSignUp,setIsProfile, setTokenState,token} = useContextAPI()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -89,8 +89,8 @@ const Header = () => {
           </button>
           
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-              {isLoggedIn ? (
+            <div className="absolute right-0 mt-2 w-48  cursor-pointer  bg-white rounded-md shadow-lg py-1 z-50">
+              {token ? (
                 <>
                   <button
                     onClick={handleSetIsProfile}
@@ -111,14 +111,14 @@ const Header = () => {
                 <>
                   <button
                     onClick={handleSignIn}
-                    className="flex items-center px-4 cursor-pointer py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                    className="flex items-center  px-4 cursor-pointer py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                   >
                     <UserPlus className="w-4 h-4 mr-2" />
                     Sign In
                   </button>
                   <button
                      onClick={handleSetIsSignUp}
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                    className="flex items-center px-4 py-2  cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                   >
                     <UserPlus className="w-4 h-4 mr-2" />
                     Sign up

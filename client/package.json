@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@tanstack/react-query": "^5.81.2",
     "@turf/turf": "^7.2.0",
+    "@types/react-stars": "^2.2.4",
     "axios": "^1.10.0",
     "lucide-react": "^0.514.0",
     "mapbox-gl": "^1.13.3",
@@ -21,6 +22,7 @@
     "react-geocode": "^2.0.1",
     "react-hook-form": "^7.58.1",
     "react-mapbox-gl": "^5.1.1",
+    "react-stars": "^2.2.5",
     "zod": "^3.25.67"
   },
   "devDependencies": {
