@@ -40,7 +40,6 @@ const login = async (
       req.body.password,
       IsCheckUser.password
     );
-    console.log('isMatch=>', passwordMatch);
 
     if (!passwordMatch) return next(throwError(StatusCodes.UNAUTHORIZED,"Password is Incorrect!"));
 
@@ -50,11 +49,7 @@ const login = async (
       email: IsCheckUser.email,
       role: IsCheckUser.role,
     };
-
-    console.log(process.env.JWT_SECRET, 'JWT_SECRET');
     const token: string = getToken(user);
-    console.log(token,"token");
-    
     res.status(StatusCodes.OK).json({ user, token });
   } catch (error) {
    return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error'));

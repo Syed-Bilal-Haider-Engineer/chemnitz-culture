@@ -33,7 +33,6 @@ export const addFavorite = async (
       .status(StatusCodes.CREATED)
       .json({ message: 'Favorite added', favorite });
   } catch (error: any) {
-    console.error('Error adding favorite:', error);
         return next(
           throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error')
         );

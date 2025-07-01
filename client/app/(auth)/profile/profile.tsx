@@ -94,7 +94,6 @@ export default function Profile() {
       const location = await fetchLocationName(lat, lng);
       setValue("lat", lat);
       setValue("lng", lng);
-      console.log("location",location)
       setValue("location", location || "Location found but could not get name");
       }
     

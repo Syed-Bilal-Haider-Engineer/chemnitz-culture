@@ -1,8 +1,5 @@
-// // Hooks/useMapData.ts
 'use client';
-// import { FeatureCollection } from 'geojson';
 import { useState, useCallback } from 'react';
-
 import axios from "axios";
 import { FeatureCollection } from "geojson";
 
@@ -14,13 +11,9 @@ export function useMapData() {
     setLoading(true);
     try {
       const query = filters ? `?${new URLSearchParams(filters).toString()}` : '';
-      const res = await fetch(`http://localhost:4000/api/${endpoint}${query}`);
-      console.log("res==>",res)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/${endpoint}${query}`);
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
       const data = await res.json();
-      console.log('Raw API response:', data);
-
       const features = data.features || data.results || [];
       
       if (!Array.isArray(features)) {
@@ -34,7 +27,7 @@ export function useMapData() {
 
       return geoData;
     } catch (err) {
-      console.error('Fetch error:', err);
+      
       setError(err instanceof Error ? err.message : 'Unknown error');
       return null;
     } finally {
@@ -44,9 +37,9 @@ export function useMapData() {
 
   return { loading, error, fetchData,setLoading };
 }
-const API_BASE = 'http://localhost:4000/api'; 
+
 export const getAllPlaces = async (): Promise<FeatureCollection> => {
-  const { data } = await axios.get(`${API_BASE}/features`);
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/features`);
 
   const features = data.features || data.results || [];
 
@@ -65,7 +58,7 @@ export const getAllPlaces = async (): Promise<FeatureCollection> => {
 
 export const searchPlacesByKeyword  = async (query:any): Promise<FeatureCollection> => {
 
-  const { data } = await axios.get(`${API_BASE}/search?searchKeyword=${query}`);
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/search?searchKeyword=${query}`);
 
   const features = data.features || data.results || [];
 
@@ -83,7 +76,7 @@ export const searchPlacesByKeyword  = async (query:any): Promise<FeatureCollecti
 
 export const searchPlacesByCategory  = async (query:any): Promise<FeatureCollection> => {
 
-  const { data } = await axios.get(`${API_BASE}/filter?category=${query}`);
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/filter?category=${query}`);
 
   const features = data.features || data.results || [];
 

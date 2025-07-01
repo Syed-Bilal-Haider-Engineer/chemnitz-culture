@@ -35,12 +35,10 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
   const [token, setTokenState] = useState('');
-
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    console.log("storedToken",storedToken)
     if (storedToken) setTokenState(storedToken);
   }, []);
 

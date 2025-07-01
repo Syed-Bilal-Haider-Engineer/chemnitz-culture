@@ -12,6 +12,6 @@ const reviewsRouter = Router();
 reviewsRouter.post('/createReviews', middleware, createReview);
 reviewsRouter.put('/updateReviews', middleware, updateReview);
 reviewsRouter.delete('/deleteReviews', middleware, deleteReview);
-reviewsRouter.get('/getFeatureReviews', getReviewsByFeatureId);
+reviewsRouter.get('/getFeatureReviews',middleware, getReviewsByFeatureId);
 
 export default reviewsRouter;

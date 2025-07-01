@@ -11,7 +11,6 @@ export const addFavorite = async (
   const { featureId } = req.body;
   const { prisma } = res.locals;
   try {
-    console.log("featureId",featureId)
     const schema = Joi.object({
       featureId: Joi.string().required(),
     });
@@ -29,12 +28,10 @@ export const addFavorite = async (
         featureId,
       },
     });
-    console.log(favorite,"favorite")
     res
       .status(StatusCodes.CREATED)
       .json({ message: 'Favorite added', favorite });
   } catch (error: any) {
-    console.error('Error adding favorite:', error);
         return next(
           throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error')
         );
@@ -73,7 +70,6 @@ export const removeFavorite = async (
 
     res.status(200).json({ message: 'Favorite removed successfully' });
   } catch (error) {
-    console.error('Error removing favorite:', error);
     return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error'));
   }
 };
@@ -93,11 +89,8 @@ export const findAllFavorite = async (
       },
     });
 
-    console.log("favorites=>",favorites)
-
     res.status(StatusCodes.OK).json(favorites);
   } catch (error) {
-    console.error('Error fetching favorites:', error);
      return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error'));
   }
 };
@@ -121,8 +114,6 @@ export const findFavoriteByFeatureId = async (
       res.status(StatusCodes.BAD_REQUEST).json({ message: error.details[0].message });
       return;
     }
-
-    console.log("featureId==>",featureId,typeof user.id)
   
    const favorite = await prisma.favorite.findUnique({
      where: {
@@ -139,7 +130,6 @@ export const findFavoriteByFeatureId = async (
 
     res.status(StatusCodes.OK).json({ ...favorite, count});
   } catch (error: any) {
-    console.error('Error finding favorite:', error);
     return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error'));
   }
 };

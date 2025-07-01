@@ -46,24 +46,19 @@ export default function MapPage() {
 
   // ✅ Runs ONCE on mount + whenever `token` changes
   useEffect(() => {
-    console.log("token verifficaiotn=>")
     const verifyAuth = async () => {
       try {
         const storedToken = token || localStorage.getItem('token');
-        console.log("storedToken main page",storedToken)
         if (!storedToken) {
           localStorage.removeItem('token');
-          setTokenState(''); // Clear if no token exists
+          setTokenState('');
           return;
         }
 
         const data = await authentication(storedToken);
-        console.log("data=>",data)
         if (data?.success === false) {
-           console.log("storedToken=>",storedToken)
            setTokenState('');
           localStorage.removeItem('token');
-          console.log("Invalid token...");
         } 
       } catch (error) {
         setTokenState('');
@@ -125,8 +120,6 @@ export default function MapPage() {
       />
     )
   }
-
-  console.log('geoData =>', geoData, 'original data =>', data)
 
   return (
     <div className='flex w-full h-screen'>

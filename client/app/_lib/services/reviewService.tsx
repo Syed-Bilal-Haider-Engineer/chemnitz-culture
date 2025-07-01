@@ -1,4 +1,3 @@
-// services/authAPI.ts
 export const addReview = async ({
 featureId,
 rating,
@@ -9,9 +8,9 @@ token
   rating: number;
   comment: string;
   token: string;
-}) => {
-  console.log(featureId,rating,comment,token)
-  const res = await fetch("http://localhost:4000/api/createReviews", {
+}) => { 
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/createReviews`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,11 +22,54 @@ token
      comment
     }),
   });
-  console.log("res==>", res);
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "Interval server error");
-  }
-
-  return res.json();
+ return res.json()
 };
+
+export const removeReview =async ({reviewId,token}:{reviewId:string, token:string}) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/deleteReviews`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+     reviewId
+    }),
+  });
+ return res.json()
+}
+
+export const updateReview =async ({reviewId,rating,comment,token}:{
+  reviewId: string;
+  rating: number;
+  comment: string;
+  token: string;
+}) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/updateReviews`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      rating,
+      comment,
+     reviewId
+    }), 
+  });
+ return res.json()
+}
+
+export const getReview =async ({reviewId,token}:{
+  reviewId: string;
+  token: string;
+}) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/getFeatureReviews?reviewId=${reviewId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    }
+  });
+ return res.json()
+}

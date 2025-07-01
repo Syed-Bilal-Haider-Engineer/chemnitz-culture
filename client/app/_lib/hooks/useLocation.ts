@@ -17,7 +17,6 @@ export const useLocation = () => {
       return data?.display_name;
     } catch (err) {
       setError('Failed to fetch location name');
-      console.error(err);
       return null;
     } finally {
       setIsLoading(false);

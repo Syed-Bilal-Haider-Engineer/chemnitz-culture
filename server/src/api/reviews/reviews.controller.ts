@@ -8,7 +8,6 @@ export const createReview = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-   console.log(req.body,"request body");
   const { prisma } = res.locals;
   try {
     const schema = Joi.object({
@@ -74,9 +73,8 @@ export const createReview = async (
 
     res
       .status(StatusCodes.CREATED)
-      .json({ message: 'Review created successfully', review });
+      .json({ message: 'Review created successfully', review,success:true });
   } catch (error) {
-    console.error('Error creating review:', error);
     return next(
       throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error')
     );
@@ -131,15 +129,6 @@ export const updateReview = async (
       data: {
         rating: rating !== undefined ? rating : existingReview.rating,
         comment: comment !== undefined ? comment : existingReview.comment
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true
-          }
-        }
       }
     });
 
@@ -147,7 +136,6 @@ export const updateReview = async (
       .status(StatusCodes.OK)
       .json({ message: 'Review updated successfully', review: updatedReview });
   } catch (error) {
-    console.error('Error updating review:', error);
     return next(
       throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error')
     );
@@ -161,7 +149,6 @@ export const deleteReview = async (
 ): Promise<void> => {
   const { reviewId } = req.body;
   const { prisma } = res.locals;
-  
   try {
     const schema = Joi.object({
       reviewId: Joi.string().required(),
@@ -201,9 +188,8 @@ export const deleteReview = async (
 
     res
       .status(StatusCodes.OK)
-      .json({ message: 'Review deleted successfully' });
+      .json({ message: 'Review deleted successfully', success:true });
   } catch (error) {
-    console.error('Error deleting review:', error);
     return next(
       throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error')
     );
@@ -215,15 +201,15 @@ export const getReviewsByFeatureId = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { featureId } = req.query;
+  const { reviewId } = req.query;
   const { prisma } = res.locals;
   
   try {
     const schema = Joi.object({
-      featureId: Joi.string().required(),
+      reviewId: Joi.string().required(),
     });
 
-    const { error } = schema.validate({ featureId });
+    const { error } = schema.validate({ reviewId });
 
     if (error) {
       res
@@ -232,36 +218,20 @@ export const getReviewsByFeatureId = async (
       return;
     }
 
-    const reviews = await prisma.review.findMany({
-      where: { featureId: featureId as string },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
+   const reviews = await prisma.review.findUnique({
+      where: {
+        id: reviewId as string,
+        userId: res.locals.user?.id, 
       }
-    });
-
-    // Calculate average rating
-    const averageRating = reviews.length > 0 
-      ? reviews.reduce((sum:Number, review:any) => sum + review.rating, 0) / reviews.length
-      : 0;
+   });
 
     res
       .status(StatusCodes.OK)
       .json({ 
         reviews, 
-        averageRating: parseFloat(averageRating.toFixed(1)),
         totalReviews: reviews.length 
       });
   } catch (error) {
-    console.error('Error fetching reviews:', error);
     return next(
       throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error')
     );

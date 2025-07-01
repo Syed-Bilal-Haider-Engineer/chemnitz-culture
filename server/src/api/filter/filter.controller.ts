@@ -6,7 +6,6 @@ import Joi from 'joi';
 const filter = async (req: Request, res: Response,next:NextFunction
 ): Promise<void> => {
   const category = req.query.category as string | undefined;
-  console.log(category,"category");
   
   const { prisma } = res.locals;
   try {
@@ -39,7 +38,6 @@ const filter = async (req: Request, res: Response,next:NextFunction
        res.status(StatusCodes.ACCEPTED).json({features, len:features.length});
     }
   } catch (error) {
-    console.error('Filter error:', error);
       return next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internel Server error'));
   }
 };

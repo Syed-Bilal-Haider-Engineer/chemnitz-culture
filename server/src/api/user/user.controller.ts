@@ -23,7 +23,6 @@ const createUser = async (
       lng: Joi.number().required(),
       location: Joi.string().required()
     });
-     console.log("req.body==>",req.body)
     const { error } = schema.validate(req.body);
 
     if (error) {
@@ -42,8 +41,6 @@ const createUser = async (
     }
 
     const hash = await getPassword(req.body.password);
-    console.log('hash=>', hash);
-
     const newUser = await prisma.user.create({
       data: { ...req.body, password: hash },
     });
@@ -80,7 +77,6 @@ export const updateUser = async (
         .json({ message: error.details[0].message });
       return;
     }
-  console.log(req.body,"req body",user)
     const updateUser = await prisma.user.update({
       omit: {
         password: true,
@@ -90,7 +86,6 @@ export const updateUser = async (
       },
       data: req.body,
     });
-    console.log(updateUser, 'updateUser');
     res.status(StatusCodes.CREATED).json({
       message: 'User Update successfully',
       user: updateUser,
@@ -109,7 +104,6 @@ export const getUserProfile = async (
 ): Promise<void> => {
   try {
     const { prisma,user } = res.locals;
-  //  console.log(user,"user")
     const schema = Joi.object({
       id: Joi.number().required(),
     });
@@ -131,12 +125,10 @@ export const getUserProfile = async (
         id:user?.id,
       },
     });
-    // console.log(getUser, 'getUser');
     res.status(StatusCodes.OK).json({
       user: getUser,
     });
   } catch (error: any) {
-    console.log(error.message);
     return next(
       throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error')
     );

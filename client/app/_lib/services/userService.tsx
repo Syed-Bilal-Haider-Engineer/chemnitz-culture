@@ -6,15 +6,15 @@ export async function loginUser({
   email: string;
   password: string;
 }) {
-  console.log("email=>", email, "password=>", password);
-  const res = await fetch("http://localhost:4000/api/login", {
+ 
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
   });
-  console.log("res", res);
+
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.message || "Login failed");
@@ -38,7 +38,7 @@ export const signupUser = async ({
   lng: number;
   location: string;
 }) => {
-  const res = await fetch("http://localhost:4000/api/signup", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export const signupUser = async ({
       location,
     }),
   });
-  console.log("res==>", res);
+ 
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || "Interval server error");
@@ -65,14 +65,14 @@ export const getUserProfile = async ({
   queryKey,
 }: QueryFunctionContext<[string, string]>) => {
   const [, token] = queryKey;
-  const res = await fetch("http://localhost:4000/api/getUserProfileDetails", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/getUserProfileDetails`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log("res==>", res);
+
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || "Interval server error");
@@ -88,15 +88,8 @@ export const updateProfile = async ({name, lat, lng, location,token}: {
   location: string;
   token: string;
 }) => {
-  console.log(
-    "name,email,lat,lng,location,token",
-    name,
-    lat,
-    lng,
-    location,
-    token
-  );
-  const res = await fetch("http://localhost:4000/api/updateUser", {
+  
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/updateUser`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -109,7 +102,7 @@ export const updateProfile = async ({name, lat, lng, location,token}: {
       location,
     }),
   });
-  console.log("res==>", res);
+
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || "Interval server error");

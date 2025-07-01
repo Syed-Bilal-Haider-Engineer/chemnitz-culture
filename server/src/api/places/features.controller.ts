@@ -6,12 +6,10 @@ const feature = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {prisma} = res.locals;
     const features = await prisma.feature.findMany({});
-    console.log(features.length,"features")
     res.status(StatusCodes.OK).json({
       features,
     });
   } catch (error) {
-    console.error('Error fetching places:', error);
     next(throwError(StatusCodes.NOT_FOUND, 'Internal server error'));
   }
 };
@@ -34,10 +32,10 @@ export const getFeatureDetails = async (
         id: featureId,
       },
       include: {
-        review: true
+        review: true,
       },
     });
-
+    
     if (!feature) {
       return next(throwError(StatusCodes.NOT_FOUND, 'Feature not found !'));
     }
