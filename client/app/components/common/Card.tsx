@@ -8,16 +8,7 @@ import { useContextAPI } from '../../_lib/context/contextAPI';
 import { findAllFavorites } from '../../_lib/services/favoriteService'
 import Loader from '../../components/specialized/Loader'
 import ErrorMessage from '../../components/specialized/ErrorMessage';
-interface TextCardProps {
-  id:string;
-  title: string;
-  description: string;
-  rating?: number;
-  reviews?: number;
-  onView?: () => void;
-  token:string;
-  refetch?: () => void
-}
+import { TextCardProps } from '@/app/type/type';
 
 const TextCard: React.FC<TextCardProps> = ({
     id,
@@ -50,7 +41,7 @@ const TextCard: React.FC<TextCardProps> = ({
           View
         </button>
         </Link>
-        <FavoriteFunctionality id={id} token={token}   onFavoriteChange={refetch}/>
+        <FavoriteFunctionality id={id} onFavoriteChange={refetch}/>
       </div>
     </div>
   );

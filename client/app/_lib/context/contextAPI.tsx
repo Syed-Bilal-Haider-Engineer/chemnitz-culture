@@ -1,20 +1,6 @@
 'use client';
+import { SidebarContextType } from '@/app/type/type';
 import { createContext, useContext, useEffect, useState } from 'react';
-
-interface SidebarContextType {
-  isCollapsed: boolean;
-  toggleSidebar: () => void;
-  isLogin: boolean;
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-  isSignUp: boolean;
-  setIsSignUp: React.Dispatch<React.SetStateAction<boolean>>;
-  isProfile: boolean;
-  setIsProfile: React.Dispatch<React.SetStateAction<boolean>>;
-  token: string;
-  setTokenState: React.Dispatch<React.SetStateAction<string>>;
-  logout: () => void;
-}
-
 const contextAPI = createContext<SidebarContextType>({
   isCollapsed: false,
   toggleSidebar: () => {},

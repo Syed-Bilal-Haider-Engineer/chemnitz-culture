@@ -1,14 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { CornerUpRight, Search, MapPin, X } from 'lucide-react'
+import { Search, MapPin, X } from 'lucide-react'
 import type { Feature } from 'geojson'
-
-interface SearchBarProps {
-  geoData: any
-  searchHanlde?: (key: string) => void
-  handleRefresh?: () => void
-}
+import { SearchBarProps } from '@/app/type/type'
 
 export default function SearchBar({
   geoData,

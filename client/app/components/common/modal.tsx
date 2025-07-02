@@ -18,7 +18,8 @@ function Modal({ children }: ModalProps) {
   if (!portalRoot) return null; 
 
   return createPortal(
-    <div id="myModal" className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 px-4 sm:px-6">
+    <div id="myModal"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 px-4 sm:px-6">
       {children}
     </div>,
     portalRoot

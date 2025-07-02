@@ -2,16 +2,10 @@
 import React from 'react';
 import Link from 'next/link';
 import FavoriteFunctionality from './FavoriteFunctionality';
+import { PopupCardProps } from '@/app/type/type';
 
-interface PopupCardProps {
-  id: string;
-  name?: string;
-  token: string;
-}
-
-const GeoCard = ({ id, name, token }: PopupCardProps) => {
+const GeoCard = ({ id, name }: PopupCardProps) => {
   const encodedId = encodeURIComponent(id);
-
   return (
     <div style={{
       width: 180,
@@ -30,7 +24,7 @@ const GeoCard = ({ id, name, token }: PopupCardProps) => {
           </div>
         </div>
       </Link>
-     {id && token && <FavoriteFunctionality id={id} token={token}/>}
+     {<FavoriteFunctionality id={id} />}
     </div>
   );
 };

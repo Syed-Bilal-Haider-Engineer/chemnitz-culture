@@ -1,29 +1,33 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import React from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import {
   addFavorite,
   findFavorite,
   removeFavorite,
 } from '../../_lib/services/favoriteService'
 import { HeartMinus, HeartPlus } from 'lucide-react'
-
-interface FavoriteFunctionalityProps {
-  id: string
-  token: string
-  onFavoriteChange?: () => void // New callback prop
-}
+import { FavoriteFunctionalityProps } from '@/app/type/type'
+import { useContextAPI } from '@/app/_lib/context/contextAPI'
 
 const FavoriteFunctionality = ({
   id,
-  token,
   onFavoriteChange,
 }: FavoriteFunctionalityProps) => {
+  const [token, setToken] = useState<string>('')
   const { data, refetch } = useQuery({
     queryKey: ['favorite', token, id],
     queryFn: findFavorite,
     enabled: !!token,
+    staleTime: 1000,
   })
-  console.log('token=>', token, 'id=>', id)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      setToken(token)
+      refetch()
+    }
+  }, [token, refetch])
   const addFavoriteMutation = useMutation({
     mutationFn: addFavorite,
     onSuccess: () => {
@@ -41,37 +45,37 @@ const FavoriteFunctionality = ({
   })
 
   const handleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
     addFavoriteMutation.mutate({ featureId: id, token })
   }
 
-  const handleUnFavorite = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+  const handleUnFavorite = (e: MouseEvent) => {
     removeFavoriteMutation.mutate({ featureId: id, token })
   }
   return (
-    <button
-      className='flex gap-1 justify-center items-center ml-2 cursor-pointer'
-      aria-label={
-        data?.featureId ? 'Remove from favorites' : 'Add to favorites'
-      }
-    >
-      <div className='hover: cursor-pointer'>
-        {data?.featureId ? (
-          <HeartMinus
-            size={18}
-            color='red'
-            fill='red'
-            onClick={handleUnFavorite}
-          />
-        ) : (
-          <HeartPlus size={18} color='gray' onClick={handleFavorite} />
-        )}
-      </div>
-      <span>{data?.count || 0}</span>
-    </button>
+    <>
+      {token && (
+        <button
+          className='flex gap-1 justify-center items-center ml-2 cursor-pointer'
+          aria-label={
+            data?.featureId ? 'Remove from favorites' : 'Add to favorites'
+          }
+        >
+          <div className='hover: cursor-pointer'>
+            {data?.featureId ? (
+              <HeartMinus
+                size={18}
+                color='red'
+                fill='red'
+                onClick={handleUnFavorite}
+              />
+            ) : (
+              <HeartPlus size={18} color='gray' onClick={handleFavorite} />
+            )}
+          </div>
+          <span>{data?.count || 0}</span>
+        </button>
+      )}
+    </>
   )
 }
 

@@ -7,7 +7,6 @@ import '../../../_lib/styles/sidebar.css'
 export default function Sidebar() {
   const pathname = usePathname();
   const { isCollapsed, toggleSidebar, token } = useContextAPI();
- console.log("sidebar token=>",token)
   const navItems = [
     { label: 'Map', href: '/', icon: <Map size={20} /> },
     ...(token ? [{ label: 'Favorites', href: '/favorites', icon: <HeartPlus size={20} /> }] : []),

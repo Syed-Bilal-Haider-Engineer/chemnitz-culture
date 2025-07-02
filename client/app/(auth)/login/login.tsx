@@ -101,7 +101,7 @@ export default function LoginPage() {
                     disabled={false}
                   />
                 </div>
-            <div>
+                <div>
                   <button
                   type="submit"
                   disabled={isPending}
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 >
                   {isPending ? "Logging in..." : "Login"}
                 </button>
-            </div>
+               </div>
               </form>
             </div>
           </div>

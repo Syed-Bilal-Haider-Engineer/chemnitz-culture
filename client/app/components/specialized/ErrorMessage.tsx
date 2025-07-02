@@ -2,11 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
-
-type ErrorMessageProps = {
-  message: string;
-  onRetry?: () => void;
-};
+import { ErrorMessageProps } from '@/app/type/type';
 
 export default function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
   return (
@@ -20,7 +16,7 @@ export default function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
           <button
             onClick={onRetry}
             className="inline-flex items-center px-4 py-2 bg-green-600 
-            text-white text-sm rounded hover:bg-blue-700 transition"
+            text-white text-sm rounded hover:bg-green-700 transition"
           >
             <RotateCcw className="w-4 h-4 mr-2" />
             Retry

@@ -9,28 +9,7 @@ import { getUserProfile } from '../services/userService';
 import { useQuery } from '@tanstack/react-query';
 import Loader from '@/app/components/specialized/Loader';
 import ErrorMessage from '@/app/components/specialized/ErrorMessage';
-
-interface Review {
-  id: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
- user:{
-    email:string;
-    name: string;
- }
-}
-
-interface ReviewSectionProps {
-  reviews: Review[];
-  averageRating: number;
-  featureId: string;
-  token:string;
-  onReviewSubmit: (rating: number, comment: string) => Promise<void>;
-  onReviewRemove:(id:string) => Promise<void>,
-  onReviewUpdate:(rating: number,editingReviewId:string, reviewText: string) => Promise<void>;
-}
-
+import { ReviewSectionProps } from '@/app/type/type';
 export default function ReviewSection({
   reviews,
   averageRating,

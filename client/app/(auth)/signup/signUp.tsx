@@ -46,13 +46,21 @@ export default function SignupForm() {
 
   const { getCurrentLocation, fetchLocationName, isLoading,getLocationNameFromLatLng } = useLocation();
 
+    function setLatLng(data?: { lat?: any; lng?: any }) {
+    if (!data) return;
+
+    const latNum = Number(data.lat);
+    const lngNum = Number(data.lng);
+
+    if (!isNaN(latNum)) setValue("lat", latNum);
+    if (!isNaN(lngNum)) setValue("lng", lngNum);
+  }
+
   const handleGetLocation = async () => {
     try {
-      const { lat, lng } = await getCurrentLocation();
+      const data= await getCurrentLocation();
       const location = await fetchLocationName(lat, lng);
-      console.log(" lat, lng ", lat, lng )
-      setValue("lat", lat);
-      setValue("lng", lng);
+      setLatLng(data);
       setValue("location", location || "Location found but could not get name");
     } catch (err: any) {
       setValue("location", err.message || "Failed to get location");
@@ -60,17 +68,24 @@ export default function SignupForm() {
   };
 
   const {location,lat,lng} = watch();
-
-  useEffect(() => {
-   async function getAddress() {
-      if(location && !lat && !lng) {
-      const data = await getLocationNameFromLatLng(location)
-      setValue("lat", data?.lat);
-      setValue("lng", data?.lng);
+  const handleLocationChange = (location: string) => {
+  if (location.length > 3 && !lng) { 
+    try {
+      setTimeout( async () => {
+        const data = await getLocationNameFromLatLng(location);
+        setLatLng(data);
+      },500)
+    } catch (error) {
+      console.error("Geocoding failed:", error);
     }
-   }
-   setTimeout(() => getAddress(),1000);
-  }, [location])
+  }
+};
+  useEffect(() => {
+    if(location){
+      console.log("locations")
+       handleLocationChange(location);
+    }
+  },[location]);
 
   const { mutate, isPending, isSuccess, isError } = useMutation({
     mutationFn: signupUser,
@@ -86,10 +101,14 @@ export default function SignupForm() {
     },
   });
 
-  const onSubmit = (data: SignUpFormData) => {
-    console.log(data,"data signup")
-      mutate(data);
-  };
+const onSubmit = async (data: SignUpFormData) => {
+  try {
+    mutate(data);
+  } catch (error:any) {
+    console.error("Form submission error:", error);
+    setErrorMsg(error.message || "Failed to submit form");
+  }
+};
 
   return (
     <>

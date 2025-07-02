@@ -39,7 +39,6 @@ export const getFeatureDetails = async (
     if (!feature) {
       return next(throwError(StatusCodes.NOT_FOUND, 'Feature not found !'));
     }
-  console.log(feature,"length")
     res.status(StatusCodes.OK).json({ feature });
   } catch (error) {
     console.error(

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Shapes, ChevronDown } from 'lucide-react'
 
 export default function CategorySelect({
@@ -10,17 +10,30 @@ export default function CategorySelect({
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<string | null>(null)
 
-  const categories = ['museum', 'restaurant', 'theatre', 'artwork']
+  const categories = useMemo(() => ['museum', 'restaurant', 'theatre', 'artwork'], []);
+
+useEffect(() => {
+  const handleClickOutside = (e: MouseEvent) => {
+    if (!(e.target as HTMLElement).closest('#category-dropdown')) {
+      setOpen(false);
+    }
+  };
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => document.removeEventListener('mousedown', handleClickOutside);
+}, []);
 
   const handleCategorySelect = (category: string) => {
     setSelected(() => category)
-    setOpen(() => false)
+    setOpen(() => false);
     if (onSelect) onSelect(category)
   }
 
   return (
-    <div className='relative'>
+    <div className='relative'  id="category-dropdown" role="listbox">
       <button
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label="Select category"
         onClick={() => setOpen(!open)}
         className='flex items-center gap-1 bg-white px-3 py-1.5 rounded-lg shadow hover:bg-gray-100 transition'
       >

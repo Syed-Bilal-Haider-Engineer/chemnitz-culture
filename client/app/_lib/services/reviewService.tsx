@@ -26,7 +26,7 @@ token
 };
 
 export const removeReview =async ({reviewId,token}:{reviewId:string, token:string}) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/deleteReviews`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/deleteReviews`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

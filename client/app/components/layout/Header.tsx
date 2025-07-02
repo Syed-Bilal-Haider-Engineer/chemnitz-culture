@@ -9,7 +9,7 @@ const Header = () => {
   const {setIsLogin,setIsSignUp,setIsProfile, setTokenState,token} = useContextAPI()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const router:any = useRouter();
 
   // Close dropdown when clicking outside or pressing Escape
   useEffect(() => {
@@ -49,7 +49,8 @@ const Header = () => {
       localStorage.removeItem('token');
       setTokenState('')
     }
-    router.push('/')
+    router.push(window.location.href);
+    router.refresh();
   };
 
   const handleSignIn = () => {
@@ -71,12 +72,6 @@ const Header = () => {
   return (
     <header className="flex items-center justify-between w-full px-4 py-1 bg-white border-b border-gray-200 shadow-sm">
       <h1 className="font-bold text-lg">Map</h1>
-      
-      <div className="flex items-center gap-4">
-        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-          <BellIcon className="w-5 h-5 text-gray-600" />
-        </button>
-        
         {/* Profile dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button 
@@ -128,7 +123,6 @@ const Header = () => {
             </div>
           )}
         </div>
-      </div>
     </header>
   );
 };

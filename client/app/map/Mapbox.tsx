@@ -9,15 +9,11 @@ import * as turf from '@turf/turf'
 import QueryProvider from '../_lib/providers/QueryProvider'
 import { useContextAPI } from '../_lib/context/contextAPI'
 import GeoCard from '../components/common/GeoCard'
-interface MapProps {
-  geoData: any | null,
-  activeCategory:number
-}
+import { MapProps } from '../type/type'
 
 function Map({ geoData,activeCategory }: MapProps) {
   const mapContainer = useRef<any>(null)
   const map = useRef<mapboxgl.Map | any>(null)
-  const { token } = useContextAPI()
   const handlePop = (feature: any): HTMLElement => {
     const container = document.createElement('div')
     const root = ReactDOM.createRoot(container)
@@ -27,7 +23,7 @@ function Map({ geoData,activeCategory }: MapProps) {
       feature.properties.artwork_type
     root.render(
       <QueryProvider>
-        <GeoCard id={feature.properties['@id']} name={label} token={token} />
+        <GeoCard id={feature.properties['@id']} name={label} />
       </QueryProvider>
     )
 

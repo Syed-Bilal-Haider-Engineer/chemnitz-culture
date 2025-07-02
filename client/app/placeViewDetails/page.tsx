@@ -221,12 +221,12 @@ export default function PlaceViewDetails() {
               <div className='flex justify-center items-center'>
                 <p className='text-sm text-gray-600'>ID: {props['@id']}</p>
                 {decodedId && (
-                  <FavoriteFunctionality id={decodedId} token={token} />
+                  <FavoriteFunctionality id={decodedId} />
                 )}
               </div>
-              {props.wikidata && (
+              {props?.wikidata && (
                 <p className='text-sm text-gray-600'>
-                  Wikidata: {props.wikidata}
+                  Wikidata: {props?.wikidata}
                 </p>
               )}
               {props['website:menu'] && (
