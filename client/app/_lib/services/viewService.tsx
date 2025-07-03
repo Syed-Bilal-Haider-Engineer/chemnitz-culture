@@ -7,7 +7,7 @@ export const getPlaceViewDetails = async ({
 }: QueryFunctionContext<[string, string]>) => {
   const [, id] = queryKey;
 
-  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/featuresDetails?featureId=${id}`);
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/placeDetails?featureId=${id}`);
 
   return response.data;
 };

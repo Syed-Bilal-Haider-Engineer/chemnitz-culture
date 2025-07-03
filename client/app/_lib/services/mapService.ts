@@ -39,7 +39,7 @@ export function useMapData() {
 }
 
 export const getAllPlaces = async (): Promise<FeatureCollection> => {
-  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/features`);
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/places`);
 
   const features = data.features || data.results || [];
 
@@ -54,7 +54,6 @@ export const getAllPlaces = async (): Promise<FeatureCollection> => {
 
   return geoData;
 };
-
 
 export const searchPlacesByKeyword  = async (query:any): Promise<FeatureCollection> => {
 

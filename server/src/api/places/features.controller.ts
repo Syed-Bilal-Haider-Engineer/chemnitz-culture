@@ -14,7 +14,7 @@ const feature = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const getFeatureDetails = async (
+export const getPlaceDetails = async (
   req: Request,
   res: Response,
   next: NextFunction

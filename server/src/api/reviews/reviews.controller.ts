@@ -203,7 +203,7 @@ export const getReviewsByFeatureId = async (
 ): Promise<void> => {
   const { reviewId } = req.query;
   const { prisma } = res.locals;
-  
+  console.log("reviewId==>",reviewId)
   try {
     const schema = Joi.object({
       reviewId: Joi.string().required(),
@@ -224,7 +224,7 @@ export const getReviewsByFeatureId = async (
         userId: res.locals.user?.id, 
       }
    });
-
+  console.log("reviews=>",reviews)
     res
       .status(StatusCodes.OK)
       .json({ 
