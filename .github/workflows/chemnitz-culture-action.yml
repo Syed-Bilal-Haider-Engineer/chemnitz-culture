@@ -1,0 +1,22 @@
+name: Chemnitz culture action
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Start workflow message
+        run: echo "Now running build workflow."
+
+      - name: Ending workflow message
+        run: |
+          echo "Now ending build workflow."
+          echo "Have a great day!"
