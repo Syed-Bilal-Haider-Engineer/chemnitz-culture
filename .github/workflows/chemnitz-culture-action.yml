@@ -13,10 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Start workflow message
-        run: echo "Now running build workflow."
+      - name: Install dependencies
+        run: npm install
 
-      - name: Ending workflow message
-        run: |
-          echo "Now ending build workflow."
-          echo "Have a great day!"
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
