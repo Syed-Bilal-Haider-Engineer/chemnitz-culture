@@ -1,4 +1,4 @@
-import { TheatreItem } from "../type/FeatureProperties.type";
+import { TheatreItem } from "../type/featureProperties.type";
 
 function thearterMapping (feature:TheatreItem):TheatreItem {
   const { amenity, name } = feature?.properties as any ?? {}

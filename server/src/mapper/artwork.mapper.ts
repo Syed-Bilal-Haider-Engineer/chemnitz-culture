@@ -1,4 +1,4 @@
-import { ArtworkItem } from "../type/FeatureProperties.type";
+import { ArtworkItem } from "../type/featureProperties.type";
 
 function artworkMapping(feature:ArtworkItem) : ArtworkItem  {
    const {tourism, name, artist_name, artwork_type,old_name,addr_city,operator} = feature?.properties as any ?? {};

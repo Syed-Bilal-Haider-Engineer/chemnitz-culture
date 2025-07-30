@@ -87,8 +87,9 @@ pnpm dev
 # or
 bun dev
 ```
-Create Database in postgreSQL then
+
 bash
+Create database in postgreSQL and then 
 # Run migrations
 npm run migrate
 

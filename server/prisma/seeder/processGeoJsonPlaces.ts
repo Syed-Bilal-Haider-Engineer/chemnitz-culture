@@ -1,7 +1,7 @@
 
 import { artworkMapping, meusemMapping, resturantMapping, thearterMapping } from '../../src/mapper';
-import { CategoryKey, CategoryType } from '../../src/type/Category.enum';
-import { FeatureProperties } from '@/src/type/FeatureProperties.type';
+import { CategoryKey, CategoryType } from '../../src/type/category.enum';
+import { FeatureProperties } from '@/src/type/featureProperties.type';
 import fs from 'fs';
 import path from 'path';
 

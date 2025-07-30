@@ -8,8 +8,8 @@ import favoriteRoutes from './src/routes/favorites.routes';
 import filterRoutes from './src/routes/filter.routes';
 import searchRoutes from './src/routes/search.routes';
 import authRouters from './src/routes/auth.routes';
-import { errorHandler } from './utils/errorHandler';
-import { prismaContext } from './middleware/prismaInjectContext';
+import { errorHandler } from './src/middleware/errorHandler';
+import { prismaContext } from './src/middleware/prismaInjectContext';
 import swaggerUI from 'swagger-ui-express';
 import swaggerDocument from './swagger-output.json';
 import authenticateRouter from './src/routes/authenticate.routes';
@@ -36,6 +36,7 @@ app.use(
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use(errorHandler);
+
 app.listen(port, () => {
   console.log(`App started successfully on port ${port}`);
 });

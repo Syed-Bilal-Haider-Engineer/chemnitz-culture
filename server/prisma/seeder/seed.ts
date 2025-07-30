@@ -1,4 +1,4 @@
-import { CategoryType } from '../../src/type/Category.enum';
+import { CategoryType } from '../../src/type/category.enum';
 import { PrismaClient, Prisma } from '@prisma/client';
 import fs from 'fs';
 import path from 'path';

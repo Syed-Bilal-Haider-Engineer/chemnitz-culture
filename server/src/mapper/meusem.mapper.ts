@@ -1,4 +1,4 @@
-import { MuseumItem } from '../type/FeatureProperties.type';
+import { MuseumItem } from '../type/featureProperties.type';
 
 function meusemMapping(feature: MuseumItem): MuseumItem {
   const { tourism, museum, museum_type,name,old_name,operator,addr_city } = feature?.properties as any ?? {};

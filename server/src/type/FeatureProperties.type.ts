@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { CategoryType } from "./Category.enum";
+import { CategoryType } from "./category.enum";
 
 export interface FeatureProperties {
   '@id'?: string;

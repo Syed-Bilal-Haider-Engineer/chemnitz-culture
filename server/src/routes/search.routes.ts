@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import search from '../api/search/search.controller';
+import search from '../controllers/search/search.controller';
+import validateRequest from '../middleware/validateRequest';
+import { searchSchema } from '../validation/searchSchemas';
 
 const searchRoutes = Router();
-searchRoutes.get('/search', search);
+searchRoutes.get('/search',validateRequest(searchSchema), search);
 
 export default searchRoutes;

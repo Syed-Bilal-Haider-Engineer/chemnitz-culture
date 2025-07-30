@@ -1,5 +1,5 @@
 
-import { authenticate } from "../../utils/global";
+import { authenticate } from "../middleware/global";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
 
