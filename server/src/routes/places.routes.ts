@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import getAllPlacesController, { getPlaceDetails } from '../controllers/places/places.controller';
+import { getPlaceDetails, getPlaces } from '../controllers/places/places.controller';
+
 
 const placesRouter = Router();
-placesRouter.get('/places',getAllPlacesController);
+placesRouter.get('/places',getPlaces);
 placesRouter.get('/placeDetails',getPlaceDetails);
 
 export default placesRouter;

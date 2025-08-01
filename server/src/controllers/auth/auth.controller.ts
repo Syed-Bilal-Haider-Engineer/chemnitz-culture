@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { StatusCodes } from 'http-status-codes';
 import { checkPassword, getToken } from '../../utils/authUtils';
 import { throwError } from '../../middleware/global';
+import authService from '../../services/authService';
 
 dotenv.config();
 
@@ -13,26 +14,24 @@ const login = async (
 ): Promise<void> => {
   try {
     const { prisma } = res.locals;
-    const IsCheckUser = await prisma.user.findUnique({
-      where: { email: req.body.email },
-    });
-
+    const IsCheckUser = await authService(prisma,req.body);
+  
     if (!IsCheckUser) {
       return next(throwError(StatusCodes.NOT_FOUND,"Email is incorrect!"));
     }
 
     const passwordMatch = await checkPassword(
       req.body.password,
-      IsCheckUser.password
+      IsCheckUser?.password
     );
 
     if (!passwordMatch) return next(throwError(StatusCodes.UNAUTHORIZED,"Password is Incorrect!"));
 
     const user = {
-      id: IsCheckUser.id,
-      name: IsCheckUser.name,
-      email: IsCheckUser.email,
-      role: IsCheckUser.role,
+      id: IsCheckUser?.id,
+      name: IsCheckUser?.name,
+      email: IsCheckUser?.email,
+      role: IsCheckUser?.role,
     };
     const token: string = getToken(user);
     res.status(StatusCodes.OK).json({ user, token });

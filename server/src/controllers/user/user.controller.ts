@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import dotenv from 'dotenv';
 import { getPassword } from '../../utils/authUtils';
 import { throwError } from '../../middleware/global';
+import addUserService, { checkEmailExists, updateUserService } from '../../services/userService';
 
 dotenv.config();
 
@@ -13,20 +14,16 @@ const addUser = async (
 ): Promise<void> => {
   try {
     const { prisma } = res.locals;
-
-    const isExistEmail = await prisma.user.findUnique({
-      where: { email: req.body.email },
-    });
+    const isExistEmail = await checkEmailExists(prisma,req);
 
     if (isExistEmail) {
       return next(throwError(StatusCodes.CONFLICT, 'Email already exists!'));
     }
 
     const hash = await getPassword(req.body.password);
-    const newUser = await prisma.user.create({
-      data: { ...req.body, password: hash },
-    });
-    if (newUser) {
+    const latestUser = await addUserService(prisma,req,hash);
+
+    if (latestUser) {
       res.status(StatusCodes.CREATED).json({
         message: 'User created successfully',
       });
@@ -42,20 +39,13 @@ export const updateUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+
     const { prisma,user } = res.locals;
-   
-    const updateUser = await prisma.user.update({
-      omit: {
-        password: true,
-      },
-      where: {
-        id: user?.id,
-      },
-      data: req.body,
-    });
+    const updateUser = await updateUserService(prisma,req,user);
+    const {password, ...rest} = updateUser;
     res.status(StatusCodes.CREATED).json({
       message: 'User Update successfully',
-      user: updateUser,
+      user: rest,
     });
   } catch (error) {
     return next(
