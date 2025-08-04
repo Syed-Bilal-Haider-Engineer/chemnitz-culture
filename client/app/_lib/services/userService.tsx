@@ -2,17 +2,19 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 export async function loginUser({
   email,
   password,
+  clerkId,
 }: {
   email: string;
-  password: string;
+  password?: string;
+  clerkId?: string;
 }) {
- 
+   console.log("email==>",email);
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, clerkId }),
   });
 
   if (!res.ok) {
@@ -22,7 +24,6 @@ export async function loginUser({
   return res.json();
 }
 
-// services/authAPI.ts
 export const signupUser = async ({
   name,
   email,
@@ -30,13 +31,15 @@ export const signupUser = async ({
   lat,
   lng,
   location,
+  clerkId,
 }: {
   name: string;
   email: string;
-  password: string;
+  password?: string;
   lat: number;
   lng: number;
   location: string;
+  clerkId?: string;
 }) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/signup`, {
     method: "POST",
@@ -50,6 +53,7 @@ export const signupUser = async ({
       lat,
       lng,
       location,
+      clerkId,
     }),
   });
  

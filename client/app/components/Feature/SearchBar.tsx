@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Search, MapPin, X } from 'lucide-react'
 import type { Feature } from 'geojson'
 import { SearchBarProps } from '@/app/type/type'
+import { SearchFormValidate } from '../../_lib/validation/validation'
 
 export default function SearchBar({
   geoData,
@@ -12,6 +13,7 @@ export default function SearchBar({
 }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<Feature[]>([])
+  const [validationError, setValidationError] = useState<string>('')
 
   // 🔹 Load initial 10 items
   const geoJsonData = () => {
@@ -40,6 +42,7 @@ export default function SearchBar({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value
     setSearchQuery(query)
+    setValidationError('')
 
     if (query === '' && handleRefresh) {
       handleRefresh()
@@ -49,9 +52,18 @@ export default function SearchBar({
   }
 
   const handleSelect = (label: string) => {
-    setSearchQuery(() => label)
-    if (searchHanlde && label) {
-      searchHanlde(`${label}`)
+    try {
+      // Validate search keyword
+      const searchData = { searchKeyword: label }
+      SearchFormValidate.parse(searchData)
+      setValidationError('')
+      
+      setSearchQuery(() => label)
+      if (searchHanlde && label) {
+        searchHanlde(`${label}`)
+      }
+    } catch (error: any) {
+      setValidationError(error.errors?.[0]?.message || 'Invalid search keyword')
     }
   }
 
@@ -60,6 +72,7 @@ export default function SearchBar({
       handleSelect(e.currentTarget.value)
     }
   }
+  
   const renderList = (feature: any) => {
     const label =
       feature?.properties?.name ||
@@ -79,8 +92,10 @@ export default function SearchBar({
 
   const clearHandleQuery = () => {
     setSearchQuery('')
+    setValidationError('')
     handleRefresh?.()
   }
+  
   return (
     <div
       className='relative w-[250px] max-w-full bg-white overflow-y-auto'
@@ -104,6 +119,12 @@ export default function SearchBar({
           />
         )}
       </div>
+
+      {validationError && (
+        <div className="mx-2 mt-2 p-2 bg-red-100 border border-red-400 text-red-700 rounded text-xs">
+          {validationError}
+        </div>
+      )}
 
       {searchResults.length > 0 && (
         <div className=' rounded-lg '>

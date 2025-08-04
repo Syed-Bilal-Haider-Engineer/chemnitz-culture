@@ -2,7 +2,8 @@ model User {
   id        Int        @id @default(autoincrement())
   name      String
   email     String     @unique
-  password  String
+  password  String?   
+  clerkId   String?    @unique 
   lat       Float
   lng       Float
   location  String
@@ -13,7 +14,35 @@ model User {
   reviews  Review[]
  }
 
+model Organizer {
+  id              Int       @id @default(autoincrement())
+  name            String
+  email           String    @unique
+  password        String
+  organizationName String
+  taxId           String?   // Optional for Germany
+  isVerified      Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  events          Event[]
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+  location    String
+  category    String
+  organizerId Int
+  organizer   Organizer @relation(fields: [organizerId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
 enum Role {
   USER
   ADMIN
+  ORGANIZER
 }

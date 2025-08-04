@@ -88,10 +88,11 @@ export const removeReviewService = async (
 
 export const getReviewsByFeatureIdService = async (
   prisma: PrismaClient,
-  featureId: string
+  reviewId: string
 ) => {
+  console.log("reviewId==>",reviewId);
   return prisma.review.findMany({
-    where: { featureId },
+    where: { id: reviewId },
     include: {
       user: {
         select: {

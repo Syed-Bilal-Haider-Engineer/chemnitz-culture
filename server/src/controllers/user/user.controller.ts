@@ -14,14 +14,28 @@ const addUser = async (
 ): Promise<void> => {
   try {
     const { prisma } = res.locals;
-    const isExistEmail = await checkEmailExists(prisma,req);
+    const isExistEmail = await checkEmailExists(prisma, req);
 
     if (isExistEmail) {
       return next(throwError(StatusCodes.CONFLICT, 'Email already exists!'));
     }
 
+    if (req.body.clerkId) {
+      const latestUser = await addUserService(prisma, req, null);
+      if (latestUser) {
+        res.status(StatusCodes.CREATED).json({
+          message: 'User created successfully with Clerk',
+        });
+      }
+      return;
+    }
+
+    if (!req.body.password) {
+      return next(throwError(StatusCodes.BAD_REQUEST, 'Password is required for traditional signup'));
+    }
+
     const hash = await getPassword(req.body.password);
-    const latestUser = await addUserService(prisma,req,hash);
+    const latestUser = await addUserService(prisma, req, hash);
 
     if (latestUser) {
       res.status(StatusCodes.CREATED).json({
@@ -40,9 +54,9 @@ export const updateUser = async (
 ): Promise<void> => {
   try {
 
-    const { prisma,user } = res.locals;
-    const updateUser = await updateUserService(prisma,req,user);
-    const {password, ...rest} = updateUser;
+    const { prisma, user } = res.locals;
+    const updateUser = await updateUserService(prisma, req, user);
+    const { password, ...rest } = updateUser;
     res.status(StatusCodes.CREATED).json({
       message: 'User Update successfully',
       user: rest,
@@ -60,13 +74,13 @@ export const getUserProfile = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { prisma,user } = res.locals;
+    const { prisma, user } = res.locals;
     const getUser = await prisma.user.findUnique({
       omit: {
         password: true,
       },
       where: {
-        id:user?.id,
+        id: user?.id,
       },
     });
     res.status(StatusCodes.OK).json({

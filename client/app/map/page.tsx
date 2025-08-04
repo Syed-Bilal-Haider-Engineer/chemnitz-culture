@@ -15,7 +15,6 @@ import ErrorMessage from '../components/specialized/ErrorMessage'
 import { RotateCcw } from 'lucide-react'
 import { authentication } from '../_lib/services/authenticationService'
 
-// Lazy load components
 const Map = dynamic(() => import('./Mapbox'), { ssr: false })
 const SearchBar = dynamic(() => import('../components/Feature/SearchBar'), {
   ssr: false,
@@ -25,7 +24,7 @@ const CategorySelect = dynamic(() => import('../components/Feature/Filter'), {
 })
 
 export default function MapPage() {
-  const { isLogin, isSignUp, isProfile,token, setTokenState } = useContextAPI()
+  const { isLogin, isSignUp, isProfile, token, setTokenState } = useContextAPI()
 
   const [geoData, setGeoData] = useState<FeatureCollection | null>(null)
   const [geoSource, setGeoSource] = useState<'default' | 'search' | 'category'>(
@@ -44,7 +43,6 @@ export default function MapPage() {
     gcTime: 10 * 60 * 1000,
   })
 
-  // ✅ Runs ONCE on mount + whenever `token` changes
   useEffect(() => {
     const verifyAuth = async () => {
       try {
@@ -55,19 +53,21 @@ export default function MapPage() {
           return;
         }
 
-        const data = await authentication(storedToken);
-        if (data?.success === false) {
-           setTokenState('');
+        const authResult = await authentication(storedToken);
+        if (!authResult.success) {
+          console.log('Authentication failed:', authResult.message);
+          setTokenState('');
           localStorage.removeItem('token');
         } 
       } catch (error) {
+        console.error('Auth verification error:', error);
         setTokenState('');
         localStorage.removeItem('token');
       }
     };
 
     verifyAuth();
-  }, [token]); 
+  }, [token, setTokenState]); 
 
   useEffect(() => {
     if (geoSource === 'default' && data) {
@@ -75,14 +75,12 @@ export default function MapPage() {
     }
   }, [data, geoSource])
 
-  // Sidebar dynamic class
   const sidebarClass = useMemo(() => {
     return `w-[250px] bg-white border-r border-green-200 shadow-md rounded-r-2xl ${
       !isLogin || !isSignUp || !isProfile ? 'z-10' : ''
     }`
   }, [isLogin, isSignUp, isProfile])
 
-  // Handlers
   const handleSearch = useCallback(async (query: string) => {
     try {
       const result = await searchPlacesByKeyword(query)
@@ -98,7 +96,7 @@ export default function MapPage() {
       const result = await searchPlacesByCategory(category)
       setGeoData(result)
       setGeoSource('category')
-      setActiveCategory((prev) => prev + 1) // Trigger rerender
+      setActiveCategory((prev) => prev + 1)
     } catch (err) {
       console.error('Category filter failed:', err)
     }
@@ -115,7 +113,7 @@ export default function MapPage() {
   if (isError) {
     return (
       <ErrorMessage
-        message={error?.message || 'Failed to load favorites.'}
+        message={error?.message || 'Failed to load places.'}
         onRetry={() => refetch()}
       />
     )
