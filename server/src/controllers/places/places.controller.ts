@@ -17,7 +17,6 @@ export const getPlaces = async (req: Request, res: Response, next: NextFunction)
 export const getPlaceDetails = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { prisma } = res.locals;
-    console.log("req.query==>",req.query);
     const { featureId } = req.query as { featureId?: string };
 
     if (!featureId) {

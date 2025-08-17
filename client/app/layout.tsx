@@ -1,8 +1,5 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import {
-  ClerkProvider
-} from '@clerk/nextjs'
 import './globals.css';
 import SidebarProviderWrapper from './components/layout/Sidebar/SidebarProviderWrapper';
 import ReactQueryProvider from './_lib/providers/QueryProvider';
@@ -28,7 +25,6 @@ export default function RootLayout({
 }>) {
 
   return (
-    <ClerkProvider>
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -42,6 +38,6 @@ export default function RootLayout({
         </ReactQueryProvider>
       </body>
     </html>
-    </ClerkProvider>
+
   );
 }

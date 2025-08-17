@@ -14,3 +14,7 @@ export const updateUserSchema = Joi.object({
   lng: Joi.number().optional(),
   location: Joi.string().optional(),
 });
+
+export const getUserProfileSchema = Joi.object({
+  id: Joi.number().required(),
+});

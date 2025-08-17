@@ -10,8 +10,6 @@ import { useQuery } from '@tanstack/react-query';
 import Loader from '@/app/components/specialized/Loader';
 import ErrorMessage from '@/app/components/specialized/ErrorMessage';
 import { ReviewSectionProps } from '@/app/type/type';
-import { ReviewFormValidate } from '../validation/validation';
-
 export default function ReviewSection({
   reviews,
   averageRating,
@@ -29,7 +27,6 @@ export default function ReviewSection({
   const [domLoaded,setDomLoaded] = useState(false);
   const [open, setOpen] = useState(false);
   const [editingReviewId, setEditingReviewId] = useState<string | null>(null);
-  const [validationError, setValidationError] = useState<string>('');
   const menuRef = useRef<HTMLDivElement | null>(null);
 
  const { data, isLoading, isError, error ,refetch} = useQuery({
@@ -46,29 +43,16 @@ export default function ReviewSection({
     if(!token){
     return setIsLogin(true)
     }
+    if (rating < 1 || rating > 5) return; 
     
-    // Validate form data
+    setIsSubmitting(true);
     try {
-      const formData = {
-        featureId,
-        rating: Math.round(rating),
-        comment: reviewText
-      };
-      
-      ReviewFormValidate.parse(formData);
-      setValidationError('');
-      
-      setIsSubmitting(true);
-      try {
-        await onReviewSubmit(Math.round(rating), reviewText);
-        setRating(1);
-        setReviewText('');
-        setShowReviewForm(false);
-      } finally {
-        setIsSubmitting(false);
-      }
-    } catch (error: any) {
-      setValidationError(error.errors?.[0]?.message || 'Please check your input');
+      await onReviewSubmit(Math.round(rating), reviewText);
+      setRating(0);
+      setReviewText('');
+      setShowReviewForm(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -79,26 +63,12 @@ export default function ReviewSection({
 
   const handleUpdate = async () => {
     if (!editingReviewId) return;
-    
-    // Validate form data
-    try {
-      const formData = {
-        featureId,
-        rating: Math.round(rating),
-        comment: reviewText
-      };
-      
-      ReviewFormValidate.parse(formData);
-      setValidationError('');
-      
       await onReviewUpdate(rating, editingReviewId, reviewText);
       setEditingReviewId(null);
       setReviewText('');
       setRating(1);
       setShowReviewForm(false);
-    } catch (error: any) {
-      setValidationError(error.errors?.[0]?.message || 'Please check your input');
-    }
+   
   };
   
   const ratingChanged = (newRating:number) => {
@@ -109,7 +79,6 @@ export default function ReviewSection({
   const fetchUpdateReview = async (reviewId: string) => {
     try {
       const res = await getReview({ reviewId, token });
-      console.log("res reviews==>",res);
       setRating(res?.reviews.rating);
       setReviewText(res?.reviews.comment);
       setEditingReviewId(reviewId);   
@@ -141,6 +110,7 @@ export default function ReviewSection({
       )
     }
   
+
   return (
     <div className="mt-12">
       <div className="flex justify-between items-center mb-6">
@@ -176,12 +146,6 @@ export default function ReviewSection({
           <h3 className="text-xl font-semibold text-gray-900 mb-4">
             {editingReviewId ? 'Update Your Review' : 'Share Your Experience'}
           </h3>
-
-          {validationError && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-              {validationError}
-            </div>
-          )}
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Your Rating</label>

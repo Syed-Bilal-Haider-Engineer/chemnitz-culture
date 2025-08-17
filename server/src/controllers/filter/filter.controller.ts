@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 const filter = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const category = req.query.category as string | undefined;
   const { prisma } = res.locals;
-  console.log("category==>",category);
+
   try {
     const result = await filterService(prisma, category);
 

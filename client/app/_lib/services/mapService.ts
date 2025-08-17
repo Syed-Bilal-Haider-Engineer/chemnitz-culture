@@ -74,9 +74,9 @@ export const searchPlacesByKeyword  = async (query:any): Promise<FeatureCollecti
 };
 
 export const searchPlacesByCategory  = async (query:any): Promise<FeatureCollection> => {
- console.log("query==>",query);
+
   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/filter?category=${query}`);
-  console.log("data==>",data);
+
   const features = data.features || data.results || [];
 
   if (!Array.isArray(features)) {

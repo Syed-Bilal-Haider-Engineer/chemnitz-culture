@@ -8,7 +8,6 @@ import favoriteRoutes from './src/routes/favorites.routes';
 import filterRoutes from './src/routes/filter.routes';
 import searchRoutes from './src/routes/search.routes';
 import authRouters from './src/routes/auth.routes';
-import organizerRoutes from './src/routes/organizer.routes';
 import { errorHandler } from './src/middleware/errorHandler';
 import { prismaContext } from './src/middleware/prismaInjectContext';
 import swaggerUI from 'swagger-ui-express';
@@ -31,7 +30,6 @@ app.use(
   filterRoutes,
   searchRoutes,
   authRouters,
-  organizerRoutes,
   authenticateRouter,
   reviewsRouter
 );

@@ -16,6 +16,7 @@ const TextCard: React.FC<TextCardProps> = ({
   description,
   rating = 3,
   reviews = 0,
+  token,
   refetch
 }) => {
   return (

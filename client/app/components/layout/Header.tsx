@@ -1,5 +1,5 @@
 'use client';
-import { BellIcon, UserCircle, LogOut, UserPlus, Building2 } from 'lucide-react';
+import { BellIcon, UserCircle, LogOut, UserPlus } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useContextAPI } from '../../_lib/context/contextAPI';
@@ -69,16 +69,6 @@ const Header = () => {
     setIsDropdownOpen(false);
     setIsProfile((prev: boolean) => !prev)
   }
-
-  const handleOrganizerLogin = () => {
-    setIsDropdownOpen(false);
-    router.push("/organizer-login");
-  }
-
-  const handleOrganizerSignup = () => {
-    setIsDropdownOpen(false);
-    router.push("/organizer-signup");
-  }
   return (
     <header className="flex items-center justify-between w-full px-4 py-1 bg-white border-b border-gray-200 shadow-sm">
       <h1 className="font-bold text-lg">Map</h1>
@@ -127,21 +117,6 @@ const Header = () => {
                   >
                     <UserPlus className="w-4 h-4 mr-2" />
                     Sign up
-                  </button>
-                  <div className="border-t border-gray-200 my-1"></div>
-                  <button
-                    onClick={handleOrganizerLogin}
-                    className="flex items-center px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                  >
-                    <Building2 className="w-4 h-4 mr-2" />
-                    Organizer Login
-                  </button>
-                  <button
-                    onClick={handleOrganizerSignup}
-                    className="flex items-center px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                  >
-                    <Building2 className="w-4 h-4 mr-2" />
-                    Organizer Signup
                   </button>
                 </>
               )}
