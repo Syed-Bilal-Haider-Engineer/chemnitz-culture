@@ -6,7 +6,7 @@ export async function loginUser({
   email: string;
   password: string;
 }) {
- 
+  console.log("process.env.NEXT_PUBLIC_API_BASE=?",process.env.NEXT_PUBLIC_API_BASE,email)
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/login`, {
     method: "POST",
     headers: {
@@ -14,7 +14,7 @@ export async function loginUser({
     },
     body: JSON.stringify({ email, password }),
   });
-
+  console.log("res=>",res);
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.message || "Login failed");
@@ -38,6 +38,7 @@ export const signupUser = async ({
   lng: number;
   location: string;
 }) => {
+  console.log("name",name)
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/signup`, {
     method: "POST",
     headers: {

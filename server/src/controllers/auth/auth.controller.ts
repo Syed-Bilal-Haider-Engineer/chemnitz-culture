@@ -13,8 +13,10 @@ const login = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    console.log("click")
     const { prisma } = res.locals;
-    const IsCheckUser = await authService(prisma,req.body);
+    console.log(req.body)
+    const IsCheckUser = await authService(prisma,req);
   
     if (!IsCheckUser) {
       return next(throwError(StatusCodes.NOT_FOUND,"Email is incorrect!"));
@@ -24,7 +26,7 @@ const login = async (
       req.body.password,
       IsCheckUser?.password
     );
-
+  console.log("IsCheckUser==>",IsCheckUser)
     if (!passwordMatch) return next(throwError(StatusCodes.UNAUTHORIZED,"Password is Incorrect!"));
 
     const user = {

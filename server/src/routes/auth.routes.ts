@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import login from '../controllers/auth/auth.controller';
-import validateRequest from '../middleware/validateRequest';
+import { validateBody } from '../middleware/validateRequest';
 import { loginSchema } from '../validation/authSchemas';
 
 const authRouters = Router();
-authRouters.post('/login',validateRequest(loginSchema), login);
+authRouters.post('/login', validateBody(loginSchema), login);
 export default authRouters;

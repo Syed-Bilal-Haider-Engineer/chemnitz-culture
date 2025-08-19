@@ -83,10 +83,11 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
   icon?: React.ReactNode;
+  readOnly?: boolean
 }
 
 const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
-  ({ type, label, error, icon, ...props }, ref) => {
+  ({ type, label, error, icon,readOnly, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
     const getInputType = () => {
       if (type !== "password") return type;
@@ -102,6 +103,7 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
           <input
             type={getInputType()}
             ref={ref}
+            readOnly={readOnly || false}
             name={props?.name}
             {...props}
             className={`mt-1 block w-full rounded-md border ${

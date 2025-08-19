@@ -157,6 +157,7 @@ export default function Profile() {
                       {...register("email")}
                       error={errors.email?.message}
                       disabled={true}
+                      readOnly={true}
                     />
                     <FormInput
                       type="text"

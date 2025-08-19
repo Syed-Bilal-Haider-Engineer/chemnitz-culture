@@ -70,6 +70,7 @@ export default function MapPage() {
   }, [token]); 
 
   useEffect(() => {
+    console.log("data==>",data)
     if (geoSource === 'default' && data) {
       setGeoData(data)
     }

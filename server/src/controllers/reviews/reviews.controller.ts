@@ -71,15 +71,15 @@ export const removeReview = async (req: Request, res: Response, next: NextFuncti
 
 export const getReviewsByFeatureId = async (req: Request, res: Response, next: NextFunction):Promise<void> => {
   const { prisma } = res.locals;
-  const featureId = req.query.featureId as string;
+  const reviewId = req.query.reviewId as string;
 
-  if (!featureId) {
+  if (!reviewId) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: 'Feature ID is required' });
     return
   }
 
   try {
-    const reviews = await getReviewsByFeatureIdService(prisma, featureId);
+    const reviews = await getReviewsByFeatureIdService(prisma, reviewId);
     res.status(StatusCodes.OK).json({ reviews, totalReviews: reviews.length });
   } catch (error) {
     next(throwError(StatusCodes.INTERNAL_SERVER_ERROR, 'Internal Server error'));
